@@ -1019,9 +1019,14 @@
                 font-weight: 600;
                 color: var(--primary-color);
             }
-
+        .cpptlg {
+            display: none;
+        }
         /* التجاوب */
         @media (max-width: 768px) {
+            .cpptlg{
+                display:block;
+            }
             .sidebar {
                 position: fixed;
                 right: -320px;
@@ -1083,7 +1088,11 @@
     <div class="app-container">
         <!-- السايدبار -->
         <div class="sidebar" id="sidebar">
+
             <div class="sidebar-header">
+                <button class="close-settings  cpptlg " onclick="closeslider()">
+                    <i class="fas fa-times"></i>
+                </button>
                 <h2>المحادثات</h2>
                 <button class="new-chat-btn" id="newChatBtn">
                     <i class="fas fa-plus"></i> محادثة جديدة
@@ -1417,6 +1426,17 @@
     </div>
 
     <script>
+
+
+        function closeslider() {
+
+
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.remove('active'); // كنسل - إغلاق الشريط الجانبي
+            }
+        }
+
         // الكائن الرئيسي للتطبيق - الإصدار الكامل
         const SaudiVoiceAssistant = {
             // الإعدادات الحالية

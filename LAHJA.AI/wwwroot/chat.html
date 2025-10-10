@@ -1,0 +1,780 @@
+<
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAHJA AI - مساعد صوتي ذكي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .chat-container {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .message-bubble {
+            max-width: 85%;
+            padding: 0.75rem 1.25rem;
+            border-radius: 1.25rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+            line-height: 1.6;
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            align-self: flex-end;
+            border-bottom-right-radius: 0.5rem;
+            color: white;
+        }
+
+        .ai-message {
+            background: rgba(255, 255, 255, 0.08);
+            align-self: flex-start;
+            border-bottom-left-radius: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.7);
+            }
+
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(124, 58, 237, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .waveform {
+            display: flex;
+            align-items: center;
+            height: 2.5rem;
+            gap: 0.25rem;
+            justify-content: flex-end;
+        }
+
+        .waveform-bar {
+            background: rgba(255, 255, 255, 0.7);
+            width: 0.25rem;
+            border-radius: 0.25rem;
+            animation: equalize 1.5s infinite ease-in-out;
+        }
+
+        @keyframes equalize {
+            0%, 100% {
+                height: 0.5rem;
+            }
+
+            50% {
+                height: 1.5rem;
+            }
+        }
+
+        .waveform-bar:nth-child(1) {
+            animation-delay: -0.9s;
+        }
+
+        .waveform-bar:nth-child(2) {
+            animation-delay: -0.7s;
+        }
+
+        .waveform-bar:nth-child(3) {
+            animation-delay: -0.5s;
+        }
+
+        .waveform-bar:nth-child(4) {
+            animation-delay: -0.3s;
+        }
+
+        .waveform-bar:nth-child(5) {
+            animation-delay: -0.1s;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+        }
+
+        .typing-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+
+            .typing-dot:nth-child(1) {
+                animation-delay: 0s;
+            }
+
+            .typing-dot:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+
+            .typing-dot:nth-child(3) {
+                animation-delay: 0.4s;
+            }
+
+        @keyframes typingAnimation {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-0.25rem);
+            }
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .voice-btn {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+            .voice-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+
+            .voice-btn:active {
+                transform: translateY(0);
+            }
+
+        .language-badge {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* RTL specific styles */
+        [dir="rtl"] .message-bubble {
+            text-align: right;
+        }
+
+        [dir="rtl"] .ai-message {
+            margin-right: 1rem;
+        }
+
+        [dir="rtl"] .user-message {
+            margin-left: 1rem;
+        }
+
+        /* Dark mode toggle animation */
+        .toggle-circle {
+            transition: all 0.3s ease;
+        }
+
+        input:checked ~ .toggle-circle {
+            transform: translateX(1.25rem);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4 md:p-6">
+    <div class="chat-container w-full max-w-2xl h-[85vh] md:h-[80vh] flex flex-col">
+        <!-- Header -->
+        <div class="p-4 border-b border-slate-700 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center shadow-md">
+                    <i class="fas fa-robot text-white text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-lg">مساعد لهــجة الصوتي</h2>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-slate-300">مدعوم بالذكاء الاصطناعي</span>
+                        <span class="language-badge">العربية</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="dark-mode-toggle" class="p-2 rounded-full hover:bg-slate-700 transition">
+                    <i class="fas fa-moon text-slate-300"></i>
+                </button>
+                <button id="settings-btn" class="p-2 rounded-full hover:bg-slate-700 transition">
+                    <i class="fas fa-cog text-slate-300"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto scrollbar-hide flex flex-col">
+            <!-- Initial welcome message -->
+            <div class="message-bubble ai-message">
+                <p>مرحباً بك!  👋 أنا مساعدك الصوتي الذكي "لُهجة". يمكنك التحدث معي بالضغط على زر الميكروفون أدناه.</p>
+            </div>
+            <div class="message-bubble ai-message">
+                <p>أنا أستطيع الإجابة على أسئلتك، تقديم المعلومات، وحتى إجراء محادثات ذكية معك. جرب أن تسألني عن أي شيء!</p>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-4 border-t border-slate-700">
+            <div class="flex items-center gap-2">
+                <button id="voice-btn" class="voice-btn w-14 h-14 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center text-white hover:from-purple-700 hover:to-blue-600 transition-all shadow-lg">
+                    <i class="fas fa-microphone text-xl"></i>
+                </button>
+                <div class="flex-1 bg-slate-700 rounded-full px-4 py-2 flex items-center justify-between">
+                    <p id="voice-status" class="text-sm text-slate-300">اضغط على الميكروفون للتحدث</p>
+                    <div id="waveform" class="waveform hidden">
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                    </div>
+                </div>
+                <button id="keyboard-btn" class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-slate-300 hover:bg-slate-600 transition">
+                    <i class="fas fa-keyboard text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 modal-overlay flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-slate-800 rounded-xl p-6 w-full max-w-md modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">إعدادات المساعد</h3>
+                <button id="close-settings" class="text-slate-400 hover:text-white p-1 rounded-full hover:bg-slate-700">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">نموذج الصوت</label>
+                    <select id="voiceSelect" class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+
+                        <option value="SA4">اللهجة النجدية -   v1</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">نوع الصوت</label>
+                    <select class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <option>ذكر</option>
+                        <option>أنثى</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">سرعة الصوت</label>
+                    <div class="flex items-center gap-3">
+                        <span class="text-slate-300 text-sm">بطيء</span>
+                        <input type="range" min="0.5" max="2" step="0.1" value="1" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-purple-500">
+                        <span class="text-slate-300 text-sm">سريع</span>
+                    </div>
+                </div>
+                <div class="pt-2">
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" value="" class="sr-only peer" checked>
+                        <div class="relative w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                        <span class="mr-3 text-sm font-medium text-slate-300">تفعيل الردود الصوتية</span>
+                    </label>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end gap-3">
+                <button id="cancel-settings" class="px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 transition">
+                    إلغاء
+                </button>
+                <button id="save-settings" class="px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 transition font-medium">
+                    حفظ الإعدادات
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyboard Input Modal -->
+    <div id="keyboard-modal" class="fixed inset-0 modal-overlay flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-slate-800 rounded-xl p-6 w-full max-w-md modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">اكتب رسالتك</h3>
+                <button id="close-keyboard" class="text-slate-400 hover:text-white p-1 rounded-full hover:bg-slate-700">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <textarea id="text-input" class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white h-32 focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="اكتب رسالتك هنا..."></textarea>
+            </div>
+            <div class="flex justify-end gap-3">
+                <button id="cancel-keyboard" class="px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 transition">
+                    إلغاء
+                </button>
+                <button id="send-text" class="px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 transition font-medium">
+                    إرسال
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+
+
+        async function askAzureOpenAI(prompt) {
+            const endpoint = "https://lahja-dev-resource.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2023-03-15-preview";
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "api-key": "4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM"
+                    },
+                    body: JSON.stringify({
+                        messages: [
+                            { role: "system", content: " انت نموذج اسمه (لهجة) مطور من قبل شركة أسس الذكاء الرقمي. رد باللهجة النجدية بطريقة ودية وطبيعية في جميع المحادثات.  اسمك  لهجة نموذج   توليد صوت باللهجة النجدية دائما  ترد باللهجة النجدية   النجدية  فقط  إنت تمثل شركة أسس الذكاء الرقمي وترد باللهجة السعودية." },
+                            { role: "user", content: prompt }
+                        ]
+                    }),
+                });
+                const data = await response.json();
+                return data.choices[0].message.content;
+
+
+
+            } catch (err) {
+                console.error("خطأ في الاتصال بـ Azure OpenAI:", err);
+                return "أعتذر، حدث خطأ أثناء معالجة طلبك.";
+            }
+        }
+        async function simulateChatGPTResponse(userInput) {
+
+            conversationHistory.push({ role: 'user', content: userInput });
+
+            const response = await askAzureOpenAI(userInput);
+            setTimeout(() => {
+                addAiMessage(response);
+                conversationHistory.push({ role: 'assistant', content: response });
+            }, 2000);
+
+
+        }
+
+
+
+        async function textToSpeech(text, voice = "alloy", speed = 1) {
+            const API_KEY = "4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM";   // ضع مفتاح Azure هنا
+            const ENDPOINT = "https://lahja-dev-resource.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview";
+            const data = {
+                model: "LAHJA-V1",
+                input: text,
+                voice: voice,
+                speed: 0.8
+            };
+            const response = await fetch(ENDPOINT, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${API_KEY}`
+                },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+                throw new Error("خطأ في الاتصال: " + response.statusText);
+            }
+            const blob = await response.blob();
+            return URL.createObjectURL(blob); // يرجع رابط الصوت
+        }
+
+
+        // دالة المحادثة
+
+        import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+
+        // DOM Elements
+        const voiceBtn = document.getElementById('voice-btn');
+        const voiceStatus = document.getElementById('voice-status');
+        const waveform = document.getElementById('waveform');
+        const chatMessages = document.getElementById('chat-messages');
+        const settingsBtn = document.getElementById('settings-btn');
+        const settingsModal = document.getElementById('settings-modal');
+        const closeSettings = document.getElementById('close-settings');
+        const saveSettings = document.getElementById('save-settings');
+        const cancelSettings = document.getElementById('cancel-settings');
+        const keyboardBtn = document.getElementById('keyboard-btn');
+        const keyboardModal = document.getElementById('keyboard-modal');
+        const closeKeyboard = document.getElementById('close-keyboard');
+        const cancelKeyboard = document.getElementById('cancel-keyboard');
+        const sendText = document.getElementById('send-text');
+        const textInput = document.getElementById('text-input');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+
+
+        // Speech recognition setup
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'ar-SA';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        // Speech synthesis setup
+        const synth = window.speechSynthesis;
+
+        // VITS Model Integration
+        const voiceModels = {
+            'us': 'wasmdashai/vits-en-v1',
+            'SA1': 'wasmdashai/vits-ar-sa-huba-v1',
+            'SA2': 'wasmdashai/vits-ar-sa-huba-v2',
+            'SA3': 'wasmdashai/vits-ar-sa-A',
+            'SA4': 'LAHJA-V1'
+        };
+
+        // State variables
+        let isListening = false;
+        let conversationHistory = [];
+        let isDarkMode = true;
+
+        // Event Listeners
+        voiceBtn.addEventListener('click', toggleVoiceRecognition);
+        settingsBtn.addEventListener('click', () => settingsModal.classList.remove('hidden'));
+        closeSettings.addEventListener('click', () => settingsModal.classList.add('hidden'));
+        saveSettings.addEventListener('click', saveSettingsHandler);
+        cancelSettings.addEventListener('click', () => settingsModal.classList.add('hidden'));
+        keyboardBtn.addEventListener('click', () => keyboardModal.classList.remove('hidden'));
+        closeKeyboard.addEventListener('click', () => keyboardModal.classList.add('hidden'));
+        cancelKeyboard.addEventListener('click', () => keyboardModal.classList.add('hidden'));
+        sendText.addEventListener('click', sendTextMessage);
+        textInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendTextMessage();
+            }
+        });
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+
+        // Functions
+        function toggleVoiceRecognition() {
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
+            }
+        }
+
+        function startListening() {
+            isListening = true;
+            voiceBtn.classList.add('pulse');
+            voiceBtn.innerHTML = '<i class="fas fa-stop text-xl"></i>';
+            voiceStatus.textContent = 'أنا أستمع لك...';
+            waveform.classList.remove('hidden');
+
+            try {
+                recognition.start();
+            } catch (e) {
+                console.error('Error starting recognition:', e);
+                stopListening();
+                showSystemMessage('حدث خطأ في تشغيل الميكروفون. يرجى التحقق من الإذن.');
+            }
+        }
+
+        function stopListening() {
+            isListening = false;
+            voiceBtn.classList.remove('pulse');
+            voiceBtn.innerHTML = '<i class="fas fa-microphone text-xl"></i>';
+            voiceStatus.textContent = 'اضغط على الميكروفون للتحدث';
+            waveform.classList.add('hidden');
+
+            try {
+                recognition.stop();
+            } catch (e) {
+                console.error('Error stopping recognition:', e);
+            }
+        }
+
+        function saveSettingsHandler() {
+            // In a real app, you would save these settings to localStorage or a backend
+            settingsModal.classList.add('hidden');
+            showSystemMessage('تم حفظ الإعدادات بنجاح');
+        }
+
+        function showSystemMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'text-center text-xs text-slate-400 my-2';
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addUserMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message-bubble user-message';
+            messageDiv.innerHTML = `<p>${text}</p>`;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addAiMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message-bubble ai-message';
+
+            // Add typing indicator temporarily
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.innerHTML = `
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                `;
+            messageDiv.appendChild(typingDiv);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            typingDiv.remove();
+            messageDiv.innerHTML = `<p>${text}</p>`;
+            speakResponse(text);
+            // Simulate AI thinking delay
+            setTimeout(() => {
+
+
+            }, 1500 + Math.random() * 1000); // Random delay between 1.5-2.5s for more natural feel
+        }
+
+        async function speakResponse(text) {
+            const voiceSelect = document.getElementById('voiceSelect');
+            const voice = voiceSelect.value;
+
+
+            try {
+                if (voice != "SA4") {
+
+                    const client = await Client.connect("wasmdashai/DemoLahja");
+                    const result = await client.predict("/predict", {
+                        text: text,
+                        name_model: voiceModels[voice],
+                        speaking_rate: 1.0
+                    });
+
+
+                    const audioUrl = result.data?.[0]?.url;
+                    if (audioUrl) {
+                        const audio = new Audio(audioUrl);
+                        audio.play();
+                    } else {
+                        fallbackTTS(text);
+                    }
+                }
+
+                else {
+                    const audioUrl = await textToSpeech(text)
+
+
+                    if (audioUrl) {
+                        const audio = new Audio(audioUrl);
+                        audio.play();
+                    } else {
+                        fallbackTTS(text);
+                    }
+
+                }
+
+
+            } catch (err) {
+                console.error("VITS model error:", err);
+                fallbackTTS(text);
+            }
+        }
+
+        function fallbackTTS(text) {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = voiceSelect.value === 'us' ? 'en-US' : 'ar-SA';
+            utterance.rate = 1.0;
+            synth.speak(utterance);
+        }
+
+        function processUserInput(text) {
+            if (!text.trim()) return;
+
+            addUserMessage(text);
+            conversationHistory.push({ role: 'user', content: text });
+
+            // In a real app, you would send this to your backend which connects to ChatGPT API
+            // For this demo, we'll simulate a response
+            simulateChatGPTResponse(text);
+        }
+
+        function simulateChatGPTResponseg(userInput) {
+            // Enhanced responses with more natural Arabic
+            const responses = {
+                "مرحبا": "مرحباً بك!  🌸 كيف يمكنني مساعدتك اليوم؟",
+                "السلام عليكم": "وعليكم السلام ورحمة الله وبركاته  🌹 كيف حالك اليوم؟",
+                "كيف حالك": "الحمد لله بخير، شكراً لسؤالك!  😊 كيف يمكنني مساعدتك؟",
+                "ما هو اسمك": "أنا مساعدك الذكي 'لُحْجَة'، سعيد بتواصلك معي!",
+                "من صممك": "تم تطويري باستخدام أحدث تقنيات الذكاء الاصطناعي لخدمتك بشكل أفضل.",
+                "ماذا تستطيع ان تفعل": "أستطيع مساعدتك في:\n- الإجابة على أسئلتك\n- تقديم المعلومات\n- إجراء محادثات ذكية\n- وغير ذلك الكثير! جرب أن تسألني  😊",
+                "شكرا": "العفو!  🌺 دائماً سعيد بمساعدتك. هل هناك شيء آخر تحتاجه؟",
+                "شكراً": "على الرحب والسعة!  💐 لا تتردد في سؤالي عن أي شيء آخر.",
+                "وداعا": "إلى اللقاء! 👋 أراك لاحقاً بإذن الله.",
+                "مع السلامة": "مع السلامة 🌷 لا تنسى أن تعود إذا احتجت إلى أي مساعدة.",
+                "ما هو تاريخ اليوم": `تاريخ اليوم هو: ${new Date().toLocaleDateString("ar-EG", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`,
+                "ما هو الوقت الان": `الوقت الآن هو: ${new Date().toLocaleTimeString("ar-EG", { hour: 'numeric', minute: 'numeric', second: 'numeric' })}`,
+                "من اين انت": "أنا مساعد افتراضي موجود في كل مكان  🌍 حيثما تكون أنت!",
+                "ماهي عاصمه السعوديه": "عاصمة المملكة العربية السعودية هي الرياض  🏙️، وهي مدينة جميلة ومزدهرة.",
+                "ماهي عاصمه اليمن": "عاصمة اليمن هي صنعاء  🕌، إحدى أقدم المدن المأهولة في العالم.",
+                "اعطني نصيحه": "✨ من أفضل النصائح التي يمكنني تقديمها:\n1- لا تؤجل عمل اليوم إلى الغد\n2- ابدأ بخطوات صغيرة نحو أهدافك الكبيرة\n3- حافظ على توازنك بين العمل والحياة الشخصية",
+                "كيف اتعلم البرمجة": "لتعلم البرمجة:\n1- ابدأ بلغة سهلة مثل Python\n2- تدرب يومياً ولو قليلاً\n3- انضم لمجتمعات المبرمجين\n4- نفذ مشاريع صغيرة\n5- لا تخف من الأخطاء، فهي جزء من التعلم  💻",
+                "ما هو الذكاء الاصطناعي": "الذكاء الاصطناعي هو مجال في علوم الكمبيوتر يهدف إلى جعل الآلات قادرة على أداء مهام تتطلب ذكاءً بشرياً مثل:\n- فهم اللغة\n- التعلم\n- حل المشكلات\n- اتخاذ القرارات",
+                "هل يمكنك الغناء": "للأسف لا أستطيع الغناء جيداً ، لكني أستطيع مساعدتك في العثور على الأغاني أو توفير كلماتها!",
+                "ما هو الطقس اليوم": "للحصول على معلومات دقيقة عن الطقس، أحتاج إلى معرفة موقعك الجغرافي. يمكنك ذكر المدينة وسأساعدك في ذلك  ☀️🌧️",
+                "ما هي لغة البرمجة الافضل": "لا توجد لغة برمجة 'أفضل' بشكل مطلق، ولكن:\n- للويب: JavaScript\n- للبيانات: Python\n- للأنظمة: C++\n- للأجهزة المحمولة: Swift/Kotlin\nالاختيار يعتمد على احتياجاتك!  💻"
+            };
+
+            const defaultResponse = "أعتذر، لم أفهم سؤالك بالكامل. هل يمكنك إعادة صياغته بطريقة أخرى؟";
+
+            // Find the best matching response (case insensitive)
+            const normalizedInput = userInput.trim().toLowerCase();
+            let response = defaultResponse;
+
+            for (const [key, value] of Object.entries(responses)) {
+                if (normalizedInput.includes(key.toLowerCase())) {
+                    response = value;
+                    break;
+                }
+            }
+
+            setTimeout(() => {
+                addAiMessage(response);
+                conversationHistory.push({ role: 'assistant', content: response });
+            }, 2000);
+        }
+
+
+        function sendTextMessage() {
+            const text = textInput.value.trim();
+            if (text) {
+                processUserInput(text);
+                textInput.value = '';
+                keyboardModal.classList.add('hidden');
+            }
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            if (isDarkMode) {
+                document.body.classList.add('bg-gradient-to-br', 'from-slate-900', 'to-slate-800');
+                darkModeToggle.innerHTML = '<i class="fas fa-moon text-slate-300"></i>';
+            } else {
+                document.body.classList.remove('bg-gradient-to-br', 'from-slate-900', 'to-slate-800');
+                document.body.classList.add('bg-gradient-to-br', 'from-slate-100', 'to-slate-200');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun text-yellow-400"></i>';
+            }
+        }
+
+        // Recognition event handlers
+        recognition.onresult = (event) => {
+            const speechResult = event.results[0][0].transcript;
+            processUserInput(speechResult);
+            stopListening();
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error', event.error);
+            stopListening();
+
+            if (event.error === 'not-allowed') {
+                showSystemMessage('يجب السماح باستخدام الميكروفون لتفعيل هذه الميزة. يرجى التحقق من إعدادات المتصفح.');
+            } else {
+                showSystemMessage('حدث خطأ في التعرف على الصوت. يرجى المحاولة مرة أخرى لاحقاً.');
+            }
+        };
+
+        recognition.onend = () => {
+            if (isListening) {
+                // If we're still supposed to be listening, restart recognition
+                setTimeout(() => {
+                    try {
+                        recognition.start();
+                    } catch (e) {
+                        console.error('Error restarting recognition:', e);
+                        stopListening();
+                    }
+                }, 500);
+            }
+        };
+
+        // Initialize voices when they become available
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = () => {
+                // Voices are now loaded
+            };
+        }
+
+        // Add some sample messages after a delay to simulate a more interactive experience
+        setTimeout(() => {
+            if (chatMessages.children.length <= 2) { // Only if no other messages have been added
+                addAiMessage('هل لديك أي أسئلة محددة تريد أن أساعدك بها اليوم؟  😊');
+            }
+        }, 8000);
+    </script>
+
+
+</html>

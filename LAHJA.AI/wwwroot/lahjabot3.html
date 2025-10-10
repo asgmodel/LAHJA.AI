@@ -1,0 +1,1444 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مساعد صوتي ذكي - التحكم التلقائي في الأذونات</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI','Noto Sans Arabic',sans-serif;
+        }
+
+        body {
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            color: rgb(11, 186, 131);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+            body.night-mode {
+                background: #1a202c;
+                color: rgb(11, 186, 131);
+            }
+
+        .background-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+            background: radial-gradient(circle at 20% 50%, rgba(11, 186, 131, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(11, 186, 131, 0.3) 0%, transparent 40%);
+            animation: backgroundMove 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes backgroundMove {
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            100% {
+                transform: scale(1.2) rotate(5deg);
+            }
+        }
+
+        .night-mode .background-effect {
+            background: radial-gradient(circle at 20% 50%, rgba(11, 186, 131, 0.2) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(11, 186, 131, 0.15) 0%, transparent 40%);
+        }
+
+        .circle-outer {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(11, 186, 131, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            animation: subtlePulse 3s infinite ease-in-out;
+            z-index: 10;
+        }
+
+        @keyframes subtlePulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            }
+
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            }
+        }
+
+        .night-mode .circle-outer {
+            background: rgba(11, 186, 131, 0.15);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            animation: subtlePulseNight 3s infinite ease-in-out;
+        }
+
+        @keyframes subtlePulseNight {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            }
+
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            }
+        }
+
+        .circle-middle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(11, 186, 131, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            animation: middlePulse 4s infinite ease-in-out;
+        }
+
+        @keyframes middlePulse {
+            0% {
+                transform: scale(1);
+                background: rgba(11, 186, 131, 0.25);
+            }
+
+            50% {
+                transform: scale(1.03);
+                background: rgba(11, 186, 131, 0.3);
+            }
+
+            100% {
+                transform: scale(1);
+                background: rgba(11, 186, 131, 0.25);
+            }
+        }
+
+        .night-mode .circle-middle {
+            background: rgba(11, 186, 131, 0.25);
+            animation: middlePulseNight 4s infinite ease-in-out;
+        }
+
+        @keyframes middlePulseNight {
+            0% {
+                transform: scale(1);
+                background: rgba(11, 186, 131, 0.25);
+            }
+
+            50% {
+                transform: scale(1.03);
+                background: rgba(11, 186, 131, 0.3);
+            }
+
+            100% {
+                transform: scale(1);
+                background: rgba(11, 186, 131, 0.25);
+            }
+        }
+
+        .circle-inner {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            animation: innerGlow 5s infinite alternate;
+        }
+
+        @keyframes innerGlow {
+            0% {
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+            100% {
+                box-shadow: 0 5px 25px rgba(11, 186, 131, 0.3);
+            }
+        }
+
+        .night-mode .circle-inner {
+            background: #2d3748;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: innerGlowNight 5s infinite alternate;
+        }
+
+        @keyframes innerGlowNight {
+            0% {
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            }
+
+            100% {
+                box-shadow: 0 5px 25px rgba(11, 186, 131, 0.4);
+            }
+        }
+
+        .mic-svg {
+            width: 60px;
+            height: 60px;
+            fill: rgb(11, 186, 131);
+            transition: all 0.3s ease;
+            animation: iconFloat 6s infinite ease-in-out;
+        }
+
+        @keyframes iconFloat {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                transform: translateY(-5px) scale(1.05);
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .night-mode .mic-svg {
+            fill: rgb(11, 186, 131);
+        }
+
+        .circle-outer.listening {
+            animation: rotatePulse 1.5s infinite linear, colorShift 3s infinite alternate;
+        }
+
+        @keyframes rotatePulse {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            25% {
+                transform: rotate(5deg) scale(1.05);
+            }
+
+            50% {
+                transform: rotate(0deg) scale(1.1);
+            }
+
+            75% {
+                transform: rotate(-5deg) scale(1.05);
+            }
+
+            100% {
+                transform: rotate(0deg) scale(1);
+            }
+        }
+
+        @keyframes colorShift {
+            0% {
+                background: rgba(11, 186, 131, 0.15);
+            }
+
+            25% {
+                background: rgba(11, 186, 131, 0.25);
+            }
+
+            50% {
+                background: rgba(11, 186, 131, 0.35);
+            }
+
+            75% {
+                background: rgba(11, 186, 131, 0.25);
+            }
+
+            100% {
+                background: rgba(11, 186, 131, 0.15);
+            }
+        }
+
+        .night-mode .circle-outer.listening {
+            animation: rotatePulse 1.5s infinite linear, colorShiftNight 3s infinite alternate;
+        }
+
+        @keyframes colorShiftNight {
+            0% {
+                background: rgba(11, 186, 131, 0.15);
+            }
+
+            25% {
+                background: rgba(11, 186, 131, 0.25);
+            }
+
+            50% {
+                background: rgba(11, 186, 131, 0.35);
+            }
+
+            75% {
+                background: rgba(11, 186, 131, 0.25);
+            }
+
+            100% {
+                background: rgba(11, 186, 131, 0.15);
+            }
+        }
+
+        .circle-outer.speaking .mic-svg {
+            animation: speakIcon 0.8s infinite alternate, glowMic 1.2s infinite alternate;
+        }
+
+        @keyframes speakIcon {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+
+            25% {
+                transform: translateY(-8px) scale(1.1);
+            }
+
+            50% {
+                transform: translateY(0) scale(1);
+            }
+
+            75% {
+                transform: translateY(8px) scale(1.1);
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes glowMic {
+            0% {
+                filter: drop-shadow(0 0 0 rgba(11, 186, 131, 0.4));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 15px rgba(11, 186, 131, 0.8));
+            }
+
+            100% {
+                filter: drop-shadow(0 0 0 rgba(11, 186, 131, 0.4));
+            }
+        }
+
+        .night-mode .circle-outer.speaking .mic-svg {
+            animation: speakIcon 0.8s infinite alternate, glowMicNight 1.2s infinite alternate;
+        }
+
+        @keyframes glowMicNight {
+            0% {
+                filter: drop-shadow(0 0 0 rgba(11, 186, 131, 0.4));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 15px rgba(11, 186, 131, 0.8));
+            }
+
+            100% {
+                filter: drop-shadow(0 0 0 rgba(11, 186, 131, 0.4));
+            }
+        }
+
+        .pulse-wave {
+            position: absolute;
+            border: 2px solid rgba(11, 186, 131, 0.5);
+            border-radius: 50%;
+            width: 220px;
+            height: 220px;
+            top: 0;
+            left: 0;
+            animation: pulse 3s infinite ease-in-out;
+            opacity: 0.7;
+        }
+
+            .pulse-wave:nth-child(2) {
+                animation-delay: 1s;
+            }
+
+            .pulse-wave:nth-child(3) {
+                animation-delay: 2s;
+            }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.3);
+                opacity: 0.2;
+            }
+
+            100% {
+                transform: scale(1.6);
+                opacity: 0;
+            }
+        }
+
+        .night-mode .pulse-wave {
+            border: 2px solid rgba(11, 186, 131, 0.5);
+        }
+
+        .wave {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 50px;
+            margin-top: 15px;
+        }
+
+            .wave span {
+                display: inline-block;
+                width: 5px;
+                height: 25px;
+                background: rgb(11, 186, 131);
+                margin: 0 4px;
+                border-radius: 3px;
+                animation: wave 1.2s infinite ease-in-out;
+            }
+
+                .wave span:nth-child(2) {
+                    animation-delay: 0.1s;
+                }
+
+                .wave span:nth-child(3) {
+                    animation-delay: 0.2s;
+                }
+
+                .wave span:nth-child(4) {
+                    animation-delay: 0.3s;
+                }
+
+                .wave span:nth-child(5) {
+                    animation-delay: 0.4s;
+                }
+
+        @keyframes wave {
+            0%,40%,100% {
+                transform: scaleY(0.6);
+            }
+
+            20% {
+                transform: scaleY(1.5);
+            }
+        }
+
+        .night-mode .wave span {
+            background: rgb(11, 186, 131);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .status {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #4a5568;
+            transition: all 0.3s ease;
+            min-height: 30px;
+            padding: 0 10px;
+        }
+
+        .night-mode .status {
+            color: #a0aec0;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(11, 186, 131, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            animation: buttonPulse 4s infinite ease-in-out;
+            z-index: 100;
+        }
+
+        @keyframes buttonPulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+        }
+
+        .night-mode .theme-toggle {
+            background: rgba(11, 186, 131, 0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            animation: none;
+        }
+
+        .browser-warning {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff4757;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+            text-align: center;
+            max-width: 90%;
+        }
+
+        .permission-notice {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffa500;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+            text-align: center;
+            max-width: 90%;
+            display: none;
+        }
+
+        @keyframes textPulse {
+            0% {
+                opacity: 0.8;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.8;
+            }
+        }
+
+        .listening-text {
+            animation: textPulse 1.5s infinite;
+            font-weight: bold;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(11, 186, 131, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(11, 186, 131, 0.3);
+            border-radius: 10px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: rgba(11, 186, 131, 0.5);
+            }
+
+        .night-mode ::-webkit-scrollbar-track {
+            background: rgba(11, 186, 131, 0.05);
+        }
+
+        .night-mode ::-webkit-scrollbar-thumb {
+            background: rgba(11, 186, 131, 0.2);
+        }
+
+            .night-mode ::-webkit-scrollbar-thumb:hover {
+                background: rgba(11, 186, 131, 0.4);
+            }
+
+        .settings-panel {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 100;
+            min-width: 250px;
+        }
+
+        .night-mode .settings-panel {
+            background: #2d3748;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .settings-panel.show {
+            display: block;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+            text-align: right;
+        }
+
+            .setting-item label {
+                display: block;
+                margin-bottom: 5px;
+                color: #4a5568;
+                font-size: 14px;
+            }
+
+        .night-mode .setting-item label {
+            color: #a0aec0;
+        }
+
+        .setting-item select, .setting-item input[type=range] {
+            width: 100%;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .night-mode .setting-item select, .night-mode .setting-item input[type=range] {
+            background: #4a5568;
+            border-color: #718096;
+            color: white;
+        }
+
+        .speed-value {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .auto-restart {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(11, 186, 131, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .night-mode .auto-restart {
+            background: rgba(11, 186, 131, 0.1);
+        }
+
+        .auto-restart.active {
+            background: rgba(11, 186, 131, 0.3);
+            color: white;
+        }
+
+        .permission-manager {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            background: rgba(11, 186, 131, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .night-mode .permission-manager {
+            background: rgba(11, 186, 131, 0.1);
+        }
+
+        .permission-manager.active {
+            background: rgba(11, 186, 131, 0.3);
+            color: white;
+        }
+
+        .permission-panel {
+            position: absolute;
+            bottom: 120px;
+            right: 20px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 100;
+            min-width: 250px;
+        }
+
+        .night-mode .permission-panel {
+            background: #2d3748;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .permission-panel.show {
+            display: block;
+        }
+
+        .permission-status {
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .permission-granted {
+            background: rgba(34, 197, 94, 0.2);
+            color: #16a34a;
+        }
+
+        .permission-denied {
+            background: rgba(239, 68, 68, 0.2);
+            color: #dc2626;
+        }
+
+        .permission-prompt {
+            background: rgba(245, 158, 11, 0.2);
+            color: #d97706;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin: 5px 0;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: rgb(11, 186, 131);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(11, 186, 131, 0.1);
+            color: rgb(11, 186, 131);
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .auto-mode-selector {
+            display: flex;
+            margin: 10px 0;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .night-mode .auto-mode-selector {
+            border-color: #4a5568;
+        }
+
+        .auto-mode-option {
+            flex: 1;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+
+            .auto-mode-option.active {
+                background: rgb(11, 186, 131);
+                color: white;
+            }
+
+        .permission-history {
+            margin-top: 15px;
+            max-height: 150px;
+            overflow-y: auto;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 10px;
+        }
+
+        .night-mode .permission-history {
+            border-color: #4a5568;
+        }
+
+        .history-item {
+            padding: 5px;
+            font-size: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .night-mode .history-item {
+            border-color: #4a5568;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-effect"></div>
+
+    <!-- أزرار التحكم العلوية -->
+    <button class="theme-toggle" id="themeToggle">🌙</button>
+
+    <!-- أزرار التحكم السفلية -->
+    <button class="auto-restart" id="autoRestart" title="التشغيل التلقائي بعد الرد">🔄</button>
+    <button class="permission-manager" id="permissionManager" title="إدارة أذونات الميكروفون">🎤</button>
+
+    <!-- لوحة الإعدادات -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="setting-item">
+            <label for="voiceSelect">نوع الصوت:</label>
+            <select id="voiceSelect">
+                <option value="alloy">alloy</option>
+            </select>
+        </div>
+        <div class="setting-item">
+            <label for="speedRange">سرعة الكلام:</label>
+            <input type="range" id="speedRange" min="0.5" max="2.0" step="0.1" value="1">
+            <span class="speed-value" id="speedValue">1.0</span>
+        </div>
+    </div>
+
+    <!-- لوحة إدارة الأذونات -->
+    <div class="permission-panel" id="permissionPanel">
+        <div class="permission-status" id="permissionStatus">
+            جاري التحقق من حالة الأذونات...
+        </div>
+
+        <div class="auto-mode-selector">
+            <div class="auto-mode-option active" data-mode="auto">تلقائي</div>
+            <div class="auto-mode-option" data-mode="manual">يدوي</div>
+            <div class="auto-mode-option" data-mode="smart">ذكي</div>
+        </div>
+
+        <button class="btn btn-primary" id="requestPermission">طلب إذن الميكروفون</button>
+        <button class="btn btn-secondary" id="resetPermissions">إعادة تعيين الأذونات</button>
+
+        <div class="permission-history" id="permissionHistory">
+            <!-- سيتم ملء السجل هنا -->
+        </div>
+    </div>
+
+    <!-- الدائرة الرئيسية -->
+    <div class="circle-outer" id="micCircle">
+        <div class="pulse-wave"></div>
+        <div class="pulse-wave"></div>
+        <div class="pulse-wave"></div>
+        <div class="circle-middle">
+            <div class="circle-inner">
+                <svg class="mic-svg" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="img">
+                    <title>API</title>
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M6 13c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0 4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0-8c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm-3 .5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zM6 5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm15 5.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zM14 7c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-3.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zm-11 10c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm7 7c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm0-17c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zM10 7c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 5.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm8 .5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0 4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0-8c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0-4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm3 8.5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zM14 17c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0 3.5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm-4-12c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0 8.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm4-4.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-4c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- حالة النظام -->
+    <div class="status" id="status">جاري تهيئة النظام...</div>
+    <div class="wave hidden" id="wave">
+        <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <!-- رسائل التنبيه -->
+    <div class="browser-warning" id="browserWarning">
+        عذرًا، متصفحك الحالي لا يدعم خاصية التعرف على الصوت. يرجى استخدام Chrome أو Edge للحصول على أفضل تجربة.
+    </div>
+    <div class="permission-notice" id="permissionNotice">
+        يرجى السماح باستخدام الميكروفون للبدء
+    </div>
+
+    <script>
+        // العناصر الرئيسية
+        const micCircle = document.getElementById('micCircle');
+        const status = document.getElementById('status');
+        const wave = document.getElementById('wave');
+        const themeToggle = document.getElementById('themeToggle');
+        const browserWarning = document.getElementById('browserWarning');
+        const permissionNotice = document.getElementById('permissionNotice');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const speedRange = document.getElementById('speedRange');
+        const speedValue = document.getElementById('speedValue');
+        const autoRestart = document.getElementById('autoRestart');
+        const permissionManager = document.getElementById('permissionManager');
+        const permissionPanel = document.getElementById('permissionPanel');
+        const permissionStatus = document.getElementById('permissionStatus');
+        const requestPermission = document.getElementById('requestPermission');
+        const resetPermissions = document.getElementById('resetPermissions');
+        const permissionHistory = document.getElementById('permissionHistory');
+        const autoModeOptions = document.querySelectorAll('.auto-mode-option');
+
+        // المتغيرات العامة
+        let isNightMode = localStorage.getItem('nightMode') === 'true';
+        let autoRestartEnabled = localStorage.getItem('autoRestart') === 'true';
+        let autoMode = localStorage.getItem('autoMode') || 'smart';
+        let permissionHistoryLog = JSON.parse(localStorage.getItem('permissionHistory') || '[]');
+        let isConversationActive = false;
+        let currentAudio = null;
+        let hasMicrophonePermission = false;
+        let recognition = null;
+
+        // تهيئة النظام
+        function initSystem() {
+            loadSettings();
+            initEventListeners();
+            checkBrowserSupport();
+            updatePermissionStatus();
+            loadPermissionHistory();
+
+            // بدء التحقق من الأذونات بعد تهيئة النظام
+            setTimeout(() => {
+                checkMicrophonePermission();
+            }, 1000);
+        }
+
+        // تحميل الإعدادات
+        function loadSettings() {
+            // الوضع الليلي
+            if (isNightMode) {
+                document.body.classList.add('night-mode');
+                themeToggle.textContent = '☀️';
+            }
+
+            // التشغيل التلقائي
+            if (autoRestartEnabled) {
+                autoRestart.classList.add('active');
+            }
+
+            // وضع التشغيل التلقائي
+            autoModeOptions.forEach(option => {
+                if (option.dataset.mode === autoMode) {
+                    option.classList.add('active');
+                } else {
+                    option.classList.remove('active');
+                }
+            });
+
+            // سرعة الكلام
+            speedRange.addEventListener('input', () => {
+                speedValue.textContent = speedRange.value;
+            });
+        }
+
+        // إعداد مستمعي الأحداث
+        function initEventListeners() {
+            // تبديل الوضع الليلي
+            themeToggle.addEventListener('click', toggleNightMode);
+
+            // إدارة الأذونات
+            permissionManager.addEventListener('click', togglePermissionPanel);
+            requestPermission.addEventListener('click', requestMicrophonePermission);
+            resetPermissions.addEventListener('click', resetPermissionSettings);
+
+            // أوضاع التشغيل التلقائي
+            autoModeOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    autoModeOptions.forEach(opt => opt.classList.remove('active'));
+                    option.classList.add('active');
+                    autoMode = option.dataset.mode;
+                    localStorage.setItem('autoMode', autoMode);
+                    addToHistory(`تم تغيير وضع التشغيل إلى: ${getModeName(autoMode)}`);
+                    updateStatus(`وضع التشغيل: ${getModeName(autoMode)}`);
+                });
+            });
+
+            // التشغيل التلقائي
+            autoRestart.addEventListener('click', toggleAutoRestart);
+
+            // إعدادات إضافية
+            themeToggle.addEventListener('contextmenu', function (e) {
+                e.preventDefault();
+                settingsPanel.classList.toggle('show');
+            });
+
+            // إغلاق اللوحات بالنقر خارجها
+            document.addEventListener('click', function (e) {
+                if (!settingsPanel.contains(e.target) && e.target !== themeToggle) {
+                    settingsPanel.classList.remove('show');
+                }
+                if (!permissionPanel.contains(e.target) && e.target !== permissionManager) {
+                    permissionPanel.classList.remove('show');
+                }
+            });
+        }
+
+        // التحقق من دعم المتصفح
+        function checkBrowserSupport() {
+            if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+                status.textContent = "متصفحك لا يدعم التعرف على الصوت";
+                browserWarning.style.display = 'block';
+                return false;
+            }
+
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                status.textContent = "متصفحك لا يدعم الوصول إلى الميكروفون";
+                browserWarning.style.display = 'block';
+                return false;
+            }
+
+            return true;
+        }
+
+        // تهيئة نظام التعرف على الصوت
+        function initSpeechRecognition() {
+            if (!checkBrowserSupport()) return null;
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'ar-SA';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            // إعداد مستمعي الأحداث
+            recognition.onstart = handleRecognitionStart;
+            recognition.onresult = handleRecognitionResult;
+            recognition.onend = handleRecognitionEnd;
+            recognition.onerror = handleRecognitionError;
+
+            return recognition;
+        }
+
+        // دوال التعرف على الصوت
+        function handleRecognitionStart() {
+            setListeningUI();
+            addToHistory("بدء الاستماع...");
+        }
+
+        async function handleRecognitionResult(event) {
+            const transcript = event.results[0][0].transcript;
+            status.textContent = `تم الاستماع إلى: "${transcript}"`;
+            status.classList.remove('listening-text');
+            micCircle.classList.remove('listening');
+            addToHistory(`تم الاستماع: "${transcript}"`);
+
+            try {
+                const reply = await getGPTResponse(transcript);
+                await speakResponse(reply);
+            } catch (error) {
+                console.error('Error:', error);
+                setIdleUI("حدث خطأ في المعالجة");
+                isConversationActive = false;
+                addToHistory("خطأ في المعالجة");
+            }
+        }
+
+        function handleRecognitionEnd() {
+            if (!isConversationActive) {
+                setIdleUI("انقر على الدائرة لبدء المحادثة");
+            }
+        }
+
+        function handleRecognitionError(event) {
+            console.error('خطأ في التعرف على الصوت:', event.error);
+            addToHistory(`خطأ في التعرف: ${event.error}`);
+
+            if (event.error === 'no-speech' && isConversationActive) {
+                try {
+                    recognition.start();
+                } catch (e) {
+                    setIdleUI("حدث خطأ، حاول مرة أخرى");
+                    isConversationActive = false;
+                }
+            } else {
+                setIdleUI("حدث خطأ: " + event.error);
+                isConversationActive = false;
+            }
+        }
+
+        // دوال التحكم في الواجهة
+        function setIdleUI(message = "انقر على الدائرة لبدء المحادثة") {
+            status.textContent = message;
+            status.classList.remove('listening-text');
+            micCircle.classList.remove('listening', 'speaking');
+            wave.classList.add('hidden');
+        }
+
+        function setListeningUI() {
+            status.textContent = "أستمع إليك...";
+            status.classList.add('listening-text');
+            micCircle.classList.remove('speaking');
+            micCircle.classList.add('listening');
+            wave.classList.remove('hidden');
+        }
+
+        function setSpeakingUI() {
+            status.textContent = "جاري الرد...";
+            micCircle.classList.remove('listening');
+            micCircle.classList.add('speaking');
+        }
+
+        function updateStatus(message) {
+            status.textContent = message;
+            setTimeout(() => {
+                if (!isConversationActive) {
+                    status.textContent = "انقر على الدائرة لبدء المحادثة";
+                }
+            }, 3000);
+        }
+
+        // دوال إدارة الأذونات
+        async function checkMicrophonePermission() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                status.textContent = "تم السماح باستخدام الميكروفون ✓";
+                permissionNotice.style.display = 'none';
+                hasMicrophonePermission = true;
+
+                // إغلاق الستريم فورًا بعد التحقق
+                stream.getTracks().forEach(track => track.stop());
+
+                updatePermissionStatus();
+                addToHistory("تم منح إذن الميكروفون");
+                return true;
+            } catch (error) {
+                console.error('خطأ في إذن الميكروفون:', error);
+                status.textContent = "انقر على الدائرة للبدء (سيطلب السماح للميكروفون)";
+                permissionNotice.style.display = 'block';
+                hasMicrophonePermission = false;
+
+                updatePermissionStatus();
+                addToHistory("تم رفض إذن الميكروفون");
+                return false;
+            }
+        }
+
+        async function requestMicrophonePermission() {
+            addToHistory("طلب إذن الميكروفون...");
+            const granted = await checkMicrophonePermission();
+
+            if (granted) {
+                initSpeechRecognition();
+            }
+        }
+
+        function updatePermissionStatus() {
+            if (hasMicrophonePermission) {
+                permissionStatus.textContent = "✅ تم منح إذن الميكروفون";
+                permissionStatus.className = "permission-status permission-granted";
+            } else {
+                permissionStatus.textContent = "❌ لم يتم منح إذن الميكروفون";
+                permissionStatus.className = "permission-status permission-denied";
+            }
+        }
+
+        function resetPermissionSettings() {
+            localStorage.removeItem('permissionHistory');
+            permissionHistoryLog = [];
+            loadPermissionHistory();
+            addToHistory("تم إعادة تعيين إعدادات الأذونات");
+            updateStatus("تم إعادة تعيين الإعدادات");
+        }
+
+        // دوال السجل
+        function addToHistory(message) {
+            const timestamp = new Date().toLocaleTimeString('ar-SA');
+            permissionHistoryLog.unshift({ timestamp, message });
+
+            // الحفاظ على آخر 10 أحداث فقط
+            if (permissionHistoryLog.length > 10) {
+                permissionHistoryLog = permissionHistoryLog.slice(0, 10);
+            }
+
+            localStorage.setItem('permissionHistory', JSON.stringify(permissionHistoryLog));
+            loadPermissionHistory();
+        }
+
+        function loadPermissionHistory() {
+            permissionHistory.innerHTML = '';
+            permissionHistoryLog.forEach(entry => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.textContent = `${entry.timestamp} - ${entry.message}`;
+                permissionHistory.appendChild(item);
+            });
+        }
+
+        // دوال التحكم
+        function toggleNightMode() {
+            isNightMode = !isNightMode;
+            document.body.classList.toggle('night-mode');
+            themeToggle.textContent = isNightMode ? '☀️' : '🌙';
+            localStorage.setItem('nightMode', isNightMode.toString());
+            addToHistory(`تم تغيير الوضع إلى: ${isNightMode ? 'ليلي' : 'نهاري'}`);
+        }
+
+        function toggleAutoRestart() {
+            autoRestartEnabled = !autoRestartEnabled;
+            autoRestart.classList.toggle('active');
+            localStorage.setItem('autoRestart', autoRestartEnabled.toString());
+
+            const message = autoRestartEnabled ?
+                "تم تفعيل التشغيل التلقائي بعد الرد ✓" :
+                "تم إيقاف التشغيل التلقائي";
+
+            updateStatus(message);
+            addToHistory(message);
+        }
+
+        function togglePermissionPanel() {
+            permissionPanel.classList.toggle('show');
+            updatePermissionStatus();
+        }
+
+        function getModeName(mode) {
+            const modes = {
+                'auto': 'تلقائي',
+                'manual': 'يدوي',
+                'smart': 'ذكي'
+            };
+            return modes[mode] || mode;
+        }
+
+        // دوال المساعد (النطق والحصول على الرد)
+        async function speakResponse(text) {
+            setSpeakingUI();
+            addToHistory("جاري الرد الصوتي...");
+
+            try {
+                const voice = document.getElementById("voiceSelect").value;
+                const speed = parseFloat(document.getElementById("speedRange").value);
+                const response = await fetch("https://lahja-dev-resource.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer 4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM"
+                    },
+                    body: JSON.stringify({
+                        model: "LAHJA-V1",
+                        input: text,
+                        voice: voice,
+                        speed: 0.8
+                    })
+                });
+
+                if (!response.ok) throw new Error(`TTS error! status: ${response.status}`);
+
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+                currentAudio = new Audio(audioUrl);
+
+                currentAudio.play().catch(e => {
+                    console.error('Play error:', e);
+                    setIdleUI("خطأ في تشغيل الصوت");
+                    isConversationActive = false;
+                    addToHistory("خطأ في تشغيل الصوت");
+                });
+
+                currentAudio.onended = () => {
+                    currentAudio = null;
+                    addToHistory("انتهاء الرد الصوتي");
+
+                    // التحكم التلقائي حسب الوضع المحدد
+                    handleAutoRestart();
+                };
+
+            } catch (error) {
+                console.error('Error in speakResponse:', error);
+                setIdleUI("خطأ في تحويل النص إلى صوت");
+                isConversationActive = false;
+                addToHistory("خطأ في تحويل النص إلى صوت");
+            }
+        }
+
+        function handleAutoRestart() {
+            if (!isConversationActive) {
+                setIdleUI("انقر على الدائرة لبدء المحادثة");
+                return;
+            }
+
+            // التحكم في إعادة التشغيل حسب الوضع
+            switch (autoMode) {
+                case 'auto':
+                    // إعادة تشغيل تلقائية فورية
+                    restartListening();
+                    break;
+
+                case 'smart':
+                    // إعادة تشغيل ذكية بعد تأخير
+                    setTimeout(() => {
+                        if (isConversationActive) {
+                            restartListening();
+                        }
+                    }, 1000);
+                    break;
+
+                case 'manual':
+                    // انتظار النقر اليدوي
+                    setIdleUI("انقر على الدائرة للاستماع مجددًا");
+                    break;
+            }
+        }
+
+        function restartListening() {
+            if (isConversationActive && recognition) {
+                try {
+                    status.textContent = "أستمع إليك مجددًا...";
+                    recognition.start();
+                    addToHistory("إعادة تشغيل الاستماع تلقائيًا");
+                } catch (e) {
+                    console.error("خطأ في إعادة تشغيل التعرف:", e);
+                    setIdleUI("حدث خطأ، حاول مرة أخرى");
+                    isConversationActive = false;
+                    addToHistory("خطأ في إعادة التشغيل");
+                }
+            }
+        }
+
+        async function getGPTResponse(text) {
+            try {
+                status.textContent = 'جاري التواصل مع المساعد...';
+                addToHistory("جاري الحصول على الرد من المساعد...");
+                const response = await fetch("https://lahja-dev-resource.cognitiveservices.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2025-01-01-preview", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer 4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM"
+                    },
+                    body: JSON.stringify({
+                        messages: [
+                            {
+                                "role": "system",
+                                "content": "انت نموذج اسمه (لهجة) مطور من قبل شركة أسس الذكاء الرقمي. رد باللهجة النجدية بطريقة ودية وطبيعية في جميع المحادثات."
+                            },
+                            {
+                                "role": "system",
+                                "content": "دائما اجابتك تكون باللهجة النجدية  ودائما   اجابتك تكون مختصره جدا لا  تتجاوز سطر "
+                            }
+
+                            ,
+                            {
+                                "role": "user",
+                                "content": text
+                            }
+                        ],
+                        max_tokens: 4096,
+                        temperature: 0.75,
+                        top_p: 1,
+                        model: "gpt-4o"
+                    })
+                });
+
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                const data = await response.json();
+                addToHistory("تم استلام الرد بنجاح");
+                return data.choices[0].message.content;
+
+            } catch (error) {
+                console.error('Error getting GPT response:', error);
+                addToHistory("خطأ في الحصول على الرد من المساعد");
+                return "الله يوفقك يا طيب! والله ما قدرت أفهم كلامك تمام، حاول مرة ثانية وخذ راحتك بالكلام.";
+            }
+        }
+
+        // النقر على الدائرة الرئيسية
+        micCircle.addEventListener('click', async function () {
+            if (!isConversationActive) {
+                // التحقق من الإذن أولاً
+                if (!hasMicrophonePermission) {
+                    hasMicrophonePermission = await checkMicrophonePermission();
+                    if (!hasMicrophonePermission) {
+                        status.textContent = "انقر مرة أخرى بعد السماح للميكروفون";
+                        return;
+                    }
+                }
+
+                // تهيئة نظام التعرف على الصوت إذا لم يكن معديًا
+                if (!recognition) {
+                    recognition = initSpeechRecognition();
+                    if (!recognition) return;
+                }
+
+                // بدء المحادثة
+                isConversationActive = true;
+                try {
+                    recognition.start();
+                    addToHistory("بدء المحادثة");
+                } catch (e) {
+                    console.error("خطأ في بدء التعرف على الصوت:", e);
+                    setIdleUI("حدث خطأ عند البدء");
+                    isConversationActive = false;
+                    addToHistory("خطأ في بدء المحادثة");
+                }
+            } else {
+                // إيقاف المحادثة
+                isConversationActive = false;
+                if (recognition) {
+                    recognition.stop();
+                }
+                if (currentAudio) {
+                    currentAudio.pause();
+                }
+                setIdleUI("تم إيقاف المحادثة. انقر للبدء.");
+                addToHistory("إيقاف المحادثة");
+            }
+        });
+
+        // بدء تشغيل النظام
+        document.addEventListener('DOMContentLoaded', initSystem);
+    </script>
+</body>
+</html>

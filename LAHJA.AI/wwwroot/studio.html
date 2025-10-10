@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة لهجة AI - خدمات الذكاء الاصطناعي باللهجة النجدية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #16a34a 0%, #22c55e 50%, #4ade80 100%);
+        }
+        
+        .service-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .active-service {
+            border-left: 4px solid #16a34a;
+            background-color: #f0fdf4;
+        }
+        
+        .chat-message {
+            max-width: 70%;
+            margin-bottom: 1rem;
+        }
+        
+        .user-message {
+            margin-left: auto;
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            color: white;
+            border-radius: 1rem 1rem 0 1rem;
+        }
+        
+        .bot-message {
+            margin-right: auto;
+            background-color: white;
+            color: #1f2937;
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem 1rem 1rem 0;
+        }
+        
+        .audio-wave {
+            height: 4px;
+            background: linear-gradient(90deg, #16a34a, #22c55e, #4ade80);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .audio-wave::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: wave 1.5s linear infinite;
+        }
+        
+        @keyframes wave {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .recording {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(22, 163, 74, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-3 mb-4 md:mb-0">
+                    <i class="fas fa-robot text-3xl"></i>
+                    <div>
+                        <h1 class="text-2xl font-bold">منصة لهجة AI</h1>
+                        <p class="text-sm opacity-90">خدمات الذكاء الاصطناعي باللهجة النجدية</p>
+                    </div>
+                </div>
+                <div class="flex space-x-2">
+                    <span class="bg-white/20 px-3 py-1 rounded-full text-sm">LAHJA-V1</span>
+                    <span class="bg-white/20 px-3 py-1 rounded-full text-sm">TTS النجدي</span>
+                    <span class="bg-white/20 px-3 py-1 rounded-full text-sm">WASM-V1</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Services Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-sm p-6 sticky top-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">الخدمات المتاحة</h2>
+                    <div class="space-y-2">
+                        <button id="service-chat" class="service-btn w-full text-right py-3 px-4 rounded-lg transition active-service" data-service="chat">
+                            <div class="flex items-center justify-between">
+                                <i class="fas fa-comments text-green-600"></i>
+                                <div class="flex-1 mr-3">
+                                    <h3 class="font-semibold">محادثة نصية</h3>
+                                    <p class="text-xs text-gray-500">محادثة ذكية باللهجة النجدية</p>
+                                </div>
+                            </div>
+                        </button>
+                        
+                        <button id="service-tts" class="service-btn w-full text-right py-3 px-4 rounded-lg transition" data-service="tts">
+                            <div class="flex items-center justify-between">
+                                <i class="fas fa-volume-up text-green-600"></i>
+                                <div class="flex-1 mr-3">
+                                    <h3 class="font-semibold">تحويل النص إلى كلام</h3>
+                                    <p class="text-xs text-gray-500">تحويل النص إلى صوت نجدى</p>
+                                </div>
+                            </div>
+                        </button>
+                        
+                        <button id="service-qa" class="service-btn w-full text-right py-3 px-4 rounded-lg transition" data-service="qa">
+                            <div class="flex items-center justify-between">
+                                <i class="fas fa-question-circle text-green-600"></i>
+                                <div class="flex-1 mr-3">
+                                    <h3 class="font-semibold">الإجابة النجدية</h3>
+                                    <p class="text-xs text-gray-500">تحويل النص إلى إجابة نجدية</p>
+                                </div>
+                            </div>
+                        </button>
+                        
+                        <button id="service-voice-chat" class="service-btn w-full text-right py-3 px-4 rounded-lg transition" data-service="voice-chat">
+                            <div class="flex items-center justify-between">
+                                <i class="fas fa-microphone-alt text-green-600"></i>
+                                <div class="flex-1 mr-3">
+                                    <h3 class="font-semibold">محادثة صوتية</h3>
+                                    <p class="text-xs text-gray-500">محادثة صوتية متكاملة</p>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <div class="mt-8 pt-4 border-t border-gray-200">
+                        <h3 class="font-semibold text-gray-700 mb-3">إعدادات النظام</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">سرعة الكلام</label>
+                                <input type="range" id="speedRange" min="0.5" max="2.0" step="0.1" value="0.8" class="w-full">
+                                <div class="flex justify-between text-xs text-gray-500">
+                                    <span>بطيء</span>
+                                    <span id="speedValue">0.8</span>
+                                    <span>سريع</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">نبرة الصوت</label>
+                                <select id="voiceSelect" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                    <option value="alloy">عادي</option>
+                                    <option value="echo">رنان</option>
+                                    <option value="fable">قصصي</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Content -->
+            <div class="lg:col-span-3">
+                <!-- Chat Service -->
+                <div id="chat-service" class="service-content bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <i class="fas fa-comments text-2xl text-green-600"></i>
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800">محادثة نصية باللهجة النجدية</h2>
+                            <p class="text-gray-600">محادثة ذكية مع المساعد الافتراضي بلغة أهل نجد</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-4 h-96 overflow-y-auto mb-4" id="chatMessages">
+                        <div class="chat-message bot-message p-4">
+                            <p>أهلاً وسهلاً! أنا مساعدك الذكي "لهجة". شنو تحتاج اليوم؟</p>
+                            <span class="text-xs text-gray-500 block mt-1">الآن</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <input type="text" id="chatInput" placeholder="اكتب رسالتك هنا..." class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                        <button id="sendChat" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition flex items-center">
+                            <i class="fas fa-paper-plane ml-2"></i>
+                            إرسال
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TTS Service -->
+                <div id="tts-service" class="service-content hidden bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <i class="fas fa-volume-up text-2xl text-green-600"></i>
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800">تحويل النص إلى كلام نجدى</h2>
+                            <p class="text-gray-600">تحويل النص المكتوب إلى صوت باللهجة النجدية</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">النص المراد تحويله</label>
+                        <textarea id="ttsInput" rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="اكتب النص الذي تريد تحويله إلى صوت...">السلام عليكم، كيف الحال؟ شخبارك وشنو الأخبار؟</textarea>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <div class="text-sm text-gray-600">
+                            <span id="ttsCharCount">0</span> حرف
+                        </div>
+                        <button id="generateTTS" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition flex items-center">
+                            <i class="fas fa-play ml-2"></i>
+                            توليد الصوت
+                        </button>
+                    </div>
+                    
+                    <div id="ttsOutput" class="mt-6 hidden">
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-semibold text-green-800">الصوت المُنشأ</h3>
+                                <button id="downloadTTS" class="text-green-700 hover:text-green-900">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                            <audio id="ttsAudio" controls class="w-full"></audio>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QA Service -->
+                <div id="qa-service" class="service-content hidden bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <i class="fas fa-question-circle text-2xl text-green-600"></i>
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800">الإجابة النجدية</h2>
+                            <p class="text-gray-600">تحويل النص إلى إجابة ذكية باللهجة النجدية</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">السؤال أو النص</label>
+                        <textarea id="qaInput" rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="اكتب سؤالك أو النص الذي تريد تحويله إلى إجابة نجدية...">عطني نصيحة للتعامل مع الضغوط اليومية</textarea>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="text-sm text-gray-600">
+                            <span id="qaCharCount">0</span> حرف
+                        </div>
+                        <button id="generateQA" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition flex items-center">
+                            <i class="fas fa-brain ml-2"></i>
+                            توليد الإجابة
+                        </button>
+                    </div>
+                    
+                    <div id="qaOutput" class="hidden">
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">الإجابة النجدية</h3>
+                            <div id="qaResult" class="text-gray-700 whitespace-pre-line"></div>
+                            <div class="mt-4 flex space-x-3">
+                                <button id="copyQA" class="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded transition">
+                                    <i class="fas fa-copy ml-1"></i> نسخ
+                                </button>
+                                <button id="speakQA" class="text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded transition">
+                                    <i class="fas fa-volume-up ml-1"></i> نطق الإجابة
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voice Chat Service -->
+                <div id="voice-chat-service" class="service-content hidden bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <i class="fas fa-microphone-alt text-2xl text-green-600"></i>
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800">محادثة صوتية</h2>
+                            <p class="text-gray-600">محادثة صوتية متكاملة - أرسل صوتاً واستلم رداً صوتياً</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="font-semibold text-gray-800 mb-3">التسجيل الصوتي</h3>
+                            <div class="bg-gray-50 rounded-lg p-4 text-center">
+                                <div id="voiceRecordBtn" class="w-20 h-20 mx-auto mb-4 bg-green-600 rounded-full flex items-center justify-center text-white cursor-pointer hover:bg-green-700 transition recording">
+                                    <i class="fas fa-microphone text-2xl"></i>
+                                </div>
+                                <p class="text-gray-600 mb-2">انقر للتسجيل</p>
+                                <div id="recordTimer" class="text-sm text-gray-500 hidden">
+                                    <i class="fas fa-clock ml-1"></i> <span id="timer">0</span> ثانية
+                                </div>
+                            </div>
+                            
+                            <div id="voicePlayback" class="mt-4 hidden">
+                                <h4 class="font-medium text-gray-700 mb-2">التسجيل الحالي</h4>
+                                <audio id="userRecording" controls class="w-full"></audio>
+                                <div class="flex space-x-2 mt-2">
+                                    <button id="sendVoice" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded transition">
+                                        إرسال التسجيل
+                                    </button>
+                                    <button id="rerecord" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 rounded transition">
+                                        إعادة التسجيل
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold text-gray-800 mb-3">الرد الصوتي</h3>
+                            <div id="voiceResponse" class="bg-green-50 border border-green-200 rounded-lg p-4 hidden">
+                                <h4 class="font-medium text-green-800 mb-2">رد المساعد</h4>
+                                <audio id="botResponseAudio" controls class="w-full mb-3"></audio>
+                                <div id="responseText" class="text-sm text-gray-700 bg-white p-2 rounded border mb-3"></div>
+                                <button id="downloadResponse" class="text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded transition">
+                                    <i class="fas fa-download ml-1"></i> تحميل الرد
+                                </button>
+                            </div>
+                            
+                            <div id="voiceWaiting" class="bg-gray-50 rounded-lg p-8 text-center hidden">
+                                <div class="audio-wave rounded-lg mb-4"></div>
+                                <p class="text-gray-600">جاري معالجة التسجيل وتوليد الرد...</p>
+                            </div>
+                            
+                            <div id="voiceInitial" class="bg-gray-50 rounded-lg p-8 text-center">
+                                <i class="fas fa-microphone-slash text-4xl text-gray-400 mb-4"></i>
+                                <p class="text-gray-600">سيظهر الرد الصوتي هنا بعد إرسال التسجيل</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2025 منصة لهجة AI - خدمات الذكاء الاصطناعي باللهجة النجدية</p>
+            <p class="text-gray-400 text-sm mt-2">مطور من قبل شركة أسس الذكاء الرقمي</p>
+        </div>
+    </footer>
+
+    <script>
+        // API Configuration
+        const API_KEYS = {
+            tts: "4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM",
+            chat: "4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM"
+        };
+
+        // DOM Elements
+        const serviceBtns = document.querySelectorAll('.service-btn');
+        const serviceContents = document.querySelectorAll('.service-content');
+        const speedRange = document.getElementById('speedRange');
+        const speedValue = document.getElementById('speedValue');
+        const voiceSelect = document.getElementById('voiceSelect');
+
+        // Service Navigation
+        serviceBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const service = btn.dataset.service;
+                
+                // Update active service button
+                serviceBtns.forEach(b => b.classList.remove('active-service'));
+                btn.classList.add('active-service');
+                
+                // Show active service content
+                serviceContents.forEach(content => content.classList.add('hidden'));
+                document.getElementById(`${service}-service`).classList.remove('hidden');
+            });
+        });
+
+        // Update speed value display
+        speedRange.addEventListener('input', () => {
+            speedValue.textContent = speedRange.value;
+        });
+
+        // Chat Service
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendChat = document.getElementById('sendChat');
+
+        sendChat.addEventListener('click', sendChatMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+
+        async function sendChatMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Add user message to chat
+            addChatMessage(message, 'user');
+            chatInput.value = '';
+
+            // Show typing indicator
+            const typingIndicator = addChatMessage('...', 'bot', true);
+
+            try {
+                // Call GPT API
+                const response = await callGPTAPI(message);
+                
+                // Remove typing indicator and add bot response
+                chatMessages.removeChild(typingIndicator);
+                addChatMessage(response, 'bot');
+            } catch (error) {
+                chatMessages.removeChild(typingIndicator);
+                addChatMessage('عذراً، حصل خطأ في المعالجة. حاول مرة أخرى.', 'bot');
+                console.error('Chat error:', error);
+            }
+        }
+
+        function addChatMessage(message, sender, isTyping = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}-message p-4 ${isTyping ? 'typing' : ''}`;
+            
+            if (isTyping) {
+                messageDiv.innerHTML = `
+                    <div class="flex space-x-1">
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <p>${message}</p>
+                    <span class="text-xs text-gray-500 block mt-1">الآن</span>
+                `;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return messageDiv;
+        }
+
+        // TTS Service
+        const ttsInput = document.getElementById('ttsInput');
+        const ttsCharCount = document.getElementById('ttsCharCount');
+        const generateTTS = document.getElementById('generateTTS');
+        const ttsOutput = document.getElementById('ttsOutput');
+        const ttsAudio = document.getElementById('ttsAudio');
+        const downloadTTS = document.getElementById('downloadTTS');
+
+        ttsInput.addEventListener('input', () => {
+            ttsCharCount.textContent = ttsInput.value.length;
+        });
+
+        generateTTS.addEventListener('click', async () => {
+            const text = ttsInput.value.trim();
+            if (!text) return;
+
+            generateTTS.disabled = true;
+            generateTTS.innerHTML = '<i class="fas fa-spinner fa-spin ml-2"></i> جاري التوليد...';
+
+            try {
+                const audioUrl = await generateTTSAudio(text);
+                ttsAudio.src = audioUrl;
+                ttsOutput.classList.remove('hidden');
+                
+                // Auto-play the audio
+                setTimeout(() => ttsAudio.play(), 500);
+            } catch (error) {
+                alert('حدث خطأ أثناء توليد الصوت. حاول مرة أخرى.');
+                console.error('TTS error:', error);
+            } finally {
+                generateTTS.disabled = false;
+                generateTTS.innerHTML = '<i class="fas fa-play ml-2"></i> توليد الصوت';
+            }
+        });
+
+        downloadTTS.addEventListener('click', () => {
+            if (ttsAudio.src) {
+                const a = document.createElement('a');
+                a.href = ttsAudio.src;
+                a.download = `lahja-tts-${Date.now()}.mp3`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        });
+
+        // QA Service
+        const qaInput = document.getElementById('qaInput');
+        const qaCharCount = document.getElementById('qaCharCount');
+        const generateQA = document.getElementById('generateQA');
+        const qaOutput = document.getElementById('qaOutput');
+        const qaResult = document.getElementById('qaResult');
+        const copyQA = document.getElementById('copyQA');
+        const speakQA = document.getElementById('speakQA');
+
+        qaInput.addEventListener('input', () => {
+            qaCharCount.textContent = qaInput.value.length;
+        });
+
+        generateQA.addEventListener('click', async () => {
+            const text = qaInput.value.trim();
+            if (!text) return;
+
+            generateQA.disabled = true;
+            generateQA.innerHTML = '<i class="fas fa-spinner fa-spin ml-2"></i> جاري التوليد...';
+
+            try {
+                const answer = await callGPTAPI(text);
+                qaResult.textContent = answer;
+                qaOutput.classList.remove('hidden');
+            } catch (error) {
+                alert('حدث خطأ أثناء توليد الإجابة. حاول مرة أخرى.');
+                console.error('QA error:', error);
+            } finally {
+                generateQA.disabled = false;
+                generateQA.innerHTML = '<i class="fas fa-brain ml-2"></i> توليد الإجابة';
+            }
+        });
+
+        copyQA.addEventListener('click', () => {
+            navigator.clipboard.writeText(qaResult.textContent);
+            alert('تم نسخ الإجابة إلى الحافظة');
+        });
+
+        speakQA.addEventListener('click', async () => {
+            const text = qaResult.textContent;
+            if (!text) return;
+
+            try {
+                const audioUrl = await generateTTSAudio(text);
+                const audio = new Audio(audioUrl);
+                audio.play();
+            } catch (error) {
+                console.error('Speech error:', error);
+            }
+        });
+
+        // Voice Chat Service
+        const voiceRecordBtn = document.getElementById('voiceRecordBtn');
+        const recordTimer = document.getElementById('recordTimer');
+        const timer = document.getElementById('timer');
+        const voicePlayback = document.getElementById('voicePlayback');
+        const userRecording = document.getElementById('userRecording');
+        const sendVoice = document.getElementById('sendVoice');
+        const rerecord = document.getElementById('rerecord');
+        const voiceResponse = document.getElementById('voiceResponse');
+        const botResponseAudio = document.getElementById('botResponseAudio');
+        const responseText = document.getElementById('responseText');
+        const downloadResponse = document.getElementById('downloadResponse');
+        const voiceWaiting = document.getElementById('voiceWaiting');
+        const voiceInitial = document.getElementById('voiceInitial');
+
+        let mediaRecorder;
+        let audioChunks = [];
+        let recordingInterval;
+        let seconds = 0;
+
+        voiceRecordBtn.addEventListener('click', toggleRecording);
+
+        function toggleRecording() {
+            if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+                startRecording();
+            } else {
+                stopRecording();
+            }
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    userRecording.src = audioUrl;
+                    voicePlayback.classList.remove('hidden');
+                };
+
+                mediaRecorder.start();
+                voiceRecordBtn.classList.add('recording');
+                voiceRecordBtn.innerHTML = '<i class="fas fa-stop text-2xl"></i>';
+                
+                // Start timer
+                seconds = 0;
+                recordTimer.classList.remove('hidden');
+                recordingInterval = setInterval(() => {
+                    seconds++;
+                    timer.textContent = seconds;
+                }, 1000);
+            } catch (error) {
+                alert('تعذر الوصول إلى الميكروفون. يرجى التحقق من الأذونات.');
+                console.error('Recording error:', error);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                voiceRecordBtn.classList.remove('recording');
+                voiceRecordBtn.innerHTML = '<i class="fas fa-microphone text-2xl"></i>';
+                
+                // Stop timer
+                clearInterval(recordingInterval);
+            }
+        }
+
+        sendVoice.addEventListener('click', async () => {
+            // In a real implementation, you would:
+            // 1. Convert speech to text using a speech recognition API
+            // 2. Send text to GPT API
+            // 3. Convert GPT response to speech using TTS API
+            
+            // For demo purposes, we'll simulate the process
+            voicePlayback.classList.add('hidden');
+            voiceInitial.classList.add('hidden');
+            voiceWaiting.classList.remove('hidden');
+
+            // Simulate processing time
+            setTimeout(async () => {
+                try {
+                    // This would be the actual speech-to-text result
+                    const simulatedText = "هذا نموذج لمحادثة صوتية. في التطبيق الحقيقي، سيقوم النظام بتحويل صوتك إلى نص ثم معالجته.";
+                    
+                    // Get GPT response
+                    const gptResponse = await callGPTAPI(simulatedText);
+                    
+                    // Convert response to speech
+                    const audioUrl = await generateTTSAudio(gptResponse);
+                    
+                    // Display results
+                    botResponseAudio.src = audioUrl;
+                    responseText.textContent = gptResponse;
+                    voiceWaiting.classList.add('hidden');
+                    voiceResponse.classList.remove('hidden');
+                } catch (error) {
+                    console.error('Voice chat error:', error);
+                    voiceWaiting.classList.add('hidden');
+                    voiceInitial.classList.remove('hidden');
+                    alert('حدث خطأ في المعالجة الصوتية');
+                }
+            }, 3000);
+        });
+
+        rerecord.addEventListener('click', () => {
+            voicePlayback.classList.add('hidden');
+            recordTimer.classList.add('hidden');
+        });
+
+        downloadResponse.addEventListener('click', () => {
+            if (botResponseAudio.src) {
+                const a = document.createElement('a');
+                a.href = botResponseAudio.src;
+                a.download = `lahja-response-${Date.now()}.mp3`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        });
+
+        // API Functions
+        async function callGPTAPI(text) {
+            const response = await fetch("https://lahja-dev-resource.cognitiveservices.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2025-01-01-preview", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${API_KEYS.chat}`
+                },
+                body: JSON.stringify({
+                    messages: [
+                        {
+                            "role": "system",
+                            "content": "انت نموذج اسمه (لهجة) مطور من قبل شركة أسس الذكاء الرقمي. رد باللهجة النجدية بطريقة ودية وطبيعية في جميع المحادثات."
+                        },
+                        {
+                            "role": "user",
+                            "content": text
+                        }
+                    ],
+                    max_tokens: 4096,
+                    temperature: 0.8,
+                    top_p: 1,
+                    model: "gpt-4o"
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`GPT API error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+
+        async function generateTTSAudio(text) {
+            const speed = parseFloat(speedRange.value);
+            const voice = voiceSelect.value;
+
+            const response = await fetch("https://lahja-dev-resource.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${API_KEYS.tts}`
+                },
+                body: JSON.stringify({
+                    model: "LAHJA-V1",
+                    input: text,
+                    voice: voice,
+                    speed: speed
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`TTS API error: ${response.status}`);
+            }
+
+            const audioBlob = await response.blob();
+            return URL.createObjectURL(audioBlob);
+        }
+
+        // Initialize character counts
+        ttsInput.dispatchEvent(new Event('input'));
+        qaInput.dispatchEvent(new Event('input'));
+    </script>
+</body>
+</html>

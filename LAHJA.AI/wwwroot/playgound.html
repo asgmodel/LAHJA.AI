@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -6,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مساعد لهجة - محادثة ذكية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+    <link rel="stylesheet" href="ModulLahja.css">
+  <style>
         :root {
             --primary-color: #10B981;
             --primary-dark: #059669;
@@ -199,7 +199,7 @@
             font-size: 0.875rem;
             margin-bottom: 4px;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-amp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -478,6 +478,12 @@
                 background: rgba(16, 185, 129, 0.1);
             }
 
+        /* تحسين تصميم أيقونة تحميل الصوت في الرسائل */
+        .message-action.download-audio:hover {
+            color: var(--secondary-color);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
         .message-content {
             background: var(--surface);
             padding: 16px 20px;
@@ -573,6 +579,12 @@
                 background: var(--border);
                 transform: scale(1.05);
             }
+
+        /* تحسين تصميم زر تحميل الصوت */
+        #downloadAudioBtn:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
 
         .chat-input-wrapper {
             display: flex;
@@ -1019,14 +1031,9 @@
                 font-weight: 600;
                 color: var(--primary-color);
             }
-        .cpptlg {
-            display: none;
-        }
+
         /* التجاوب */
         @media (max-width: 768px) {
-            .cpptlg{
-                display:block;
-            }
             .sidebar {
                 position: fixed;
                 right: -320px;
@@ -1083,17 +1090,65 @@
                 background: var(--text-muted);
             }
     </style>
+   <style>
+        /* CSS يبقى كما هو */
+        :root {
+            --primary-color: #10B981;
+            --primary-dark: #059669;
+            --secondary-color: #8B5CF6;
+            --accent-color: #F59E0B;
+            --background: #FFFFFF;
+            --surface: #F8FAFC;
+            --surface-dark: #F1F5F9;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border: #E2E8F0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --background: #0F172A;
+            --surface: #1E293B;
+            --surface-dark: #334155;
+            --text-primary: #F1F5F9;
+            --text-secondary: #CBD5E1;
+            --text-muted: #64748B;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* باقي CSS يبقى كما هو */
+        /* ... */
+    </style>
 </head>
 <body>
     <div class="app-container">
         <!-- السايدبار -->
         <div class="sidebar" id="sidebar">
-
             <div class="sidebar-header">
-                <button class="close-settings  cpptlg " onclick="closeslider()">
+                <h2>المحادثات</h2>
+                 <button class="close-settings sidebar2" onclick="closesidebar()">
                     <i class="fas fa-times"></i>
                 </button>
-                <h2>المحادثات</h2>
                 <button class="new-chat-btn" id="newChatBtn">
                     <i class="fas fa-plus"></i> محادثة جديدة
                 </button>
@@ -1122,7 +1177,6 @@
                     <button class="menu-toggle" id="menuToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <!--<i class="fas fa-robot"></i>-->
                     <img src="logo.png" style="width:50px;height:50px" />
                     <h1>مساعد لهجة</h1>
                 </div>
@@ -1175,6 +1229,9 @@
                                 <button class="message-action" title="استمع إلى الرد" onclick="SaudiVoiceAssistant.speakResponse('أهلاً وسهلاً! أنا مساعدك الذكي المتحدث باللهجة السعودية. يمكنني الرد كتابياً ونطق الردود صوتياً. يمكنك التحدث معي عبر النص أو الصوت مباشرة!')">
                                     <i class="fas fa-volume-up"></i>
                                 </button>
+                                <button class="message-action download-audio" title="تحميل الصوت" onclick="SaudiVoiceAssistant.downloadMessageAudio('أهلاً وسهلاً! أنا مساعدك الذكي المتحدث باللهجة السعودية. يمكنني الرد كتابياً ونطق الردود صوتياً. يمكنك التحدث معي عبر النص أو الصوت مباشرة!')">
+                                    <i class="fas fa-download"></i>
+                                </button>
                             </div>
                         </div>
                         <div class="message-content">
@@ -1203,6 +1260,88 @@
                             <button class="input-action-btn" title="إضافة تعبير">
                                 <i class="fas fa-smile"></i>
                             </button>
+                            <button class="input-action-btn" id="popupOpener" title="تحميل الصوت">
+                                🎤
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- النافذة المنبثقة للمساعد الصوتي -->
+                    <div class="voice-popup" id="voicePopup">
+                        <div class="popup-header">
+                            <div class="popup-title">المساعد الصوتي الذكي</div>
+                            <div class="popup-controls">
+                                <button class="popup-btn" id="themeToggle">🌙</button>
+                                <button class="popup-btn" id="minimizeBtn">−</button>
+                                <button class="popup-btn" id="closeBtn">✕</button>
+                            </div>
+                        </div>
+
+                        <div class="popup-content">
+                            <div class="background-effect"></div>
+                            
+                            <!-- مؤشرات الحالة -->
+                            <div class="permission-indicator" id="permissionIndicator"></div>
+                            <div class="session-indicator" id="sessionIndicator"></div>
+
+                            <!-- زر الميكروفون -->
+                              <div class="mic-container">
+        <div class="permission-indicator" id="permissionIndicator"></div>
+        <div class="session-indicator" id="sessionIndicator"></div>
+        <div class="circle-outer" id="micCircle">
+            <div class="pulse-wave"></div>
+            <div class="pulse-wave"></div>
+            <div class="pulse-wave"></div>
+            <div class="circle-middle">
+                <div class="circle-inner">
+                    <svg class="mic-svg" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="img">
+                        <title>API</title>
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M6 13c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0 4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0-8c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm-3 .5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zM6 5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm15 5.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zM14 7c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-3.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zm-11 10c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm7 7c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm0-17c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zM10 7c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 5.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm8 .5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0 4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0-8c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0-4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm3 8.5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zM14 17c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0 3.5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm-4-12c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0 8.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm4-4.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-4c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="mic-tooltip" id="micTooltip">انقر للتحدث مع المساعد</div>
+        <div class="mic-label" id="micLabel">انقر على الميكروفون لبدء المحادثة</div>
+    </div>
+
+                            <!-- <div class="mic-container">
+                                <div class="circle-outer" id="micCircle">
+                                    <div class="pulse-wave"></div>
+                                    <div class="pulse-wave"></div>
+                                    <div class="pulse-wave"></div>
+                                    <div class="circle-middle">
+                                        <div class="circle-inner">
+                                            <svg class="mic-svg" viewBox="0 0 24 24">
+                                                <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <!-- أمواج الصوت -->
+                            <div class="wave hidden" id="wave">
+                                <span></span><span></span><span></span><span></span><span></span>
+                            </div>
+
+                            <!-- حالة النظام -->
+                            <div class="status" id="status">جاري التهيئة...</div>
+
+                            <!-- أزرار التحكم -->
+                            <div class="session-controls">
+                                <button class="session-btn" id="startSessionBtn">بدء الجلسة</button>
+                                <button class="session-btn" id="stopSessionBtn">إيقاف الجلسة</button>
+                            </div>
+
+                            <!-- رسائل التنبيه -->
+                            <div class="browser-warning" id="browserWarning">
+                                عذرًا، متصفحك لا يدعم التعرف على الصوت. يرجى استخدام Chrome أو Edge.
+                            </div>
+                            <div class="permission-notice" id="permissionNotice">
+                                يرجى السماح باستخدام الميكروفون
+                            </div>
                         </div>
                     </div>
 
@@ -1426,18 +1565,14 @@
     </div>
 
     <script>
-
-
-        function closeslider() {
-
-
-            const sidebar = document.getElementById('sidebar');
-            if (sidebar) {
-                sidebar.classList.remove('active'); // كنسل - إغلاق الشريط الجانبي
-            }
-        }
-
-        // الكائن الرئيسي للتطبيق - الإصدار الكامل
+         function closesidebar() {
+ 
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar) {
+                    sidebar.classList.toggle('active');
+                }
+            }    
+        // الكائن الرئيسي للتطبيق - الإصدار المصحح
         const SaudiVoiceAssistant = {
             // الإعدادات الحالية
             config: {
@@ -1469,7 +1604,9 @@
                 recognition: null,
                 remainingRequests: 10,
                 isSubscribed: false,
-                subscriptionToken: null
+                subscriptionToken: null,
+                messageAudioUrls: {}, // تخزين روابط الصوت لكل رسالة
+                eventListeners: {} // لتتبع المستمعين المضافين
             },
 
             // تهيئة التطبيق
@@ -1593,6 +1730,103 @@
                 const modal = document.getElementById('subscriptionModal');
                 if (modal) {
                     modal.classList.remove('active');
+                }
+            },
+
+            // تحميل الصوت الحالي
+            downloadCurrentAudio() {
+                if (!this.state.currentAudioUrl) {
+                    this.showError('لا يوجد صوت متاح للتحميل');
+                    return;
+                }
+
+                try {
+                    // إنشاء رابط تحميل
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = this.state.currentAudioUrl;
+                    
+                    // إنشاء اسم ملف مع تاريخ ووقت
+                    const now = new Date();
+                    const timestamp = now.toISOString().replace(/[:.]/g, '-');
+                    const filename = `مساعد-لهجة-${timestamp}.mp3`;
+                    
+                    downloadLink.download = filename;
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                    
+                    this.showSuccess('تم بدء تحميل الملف الصوتي');
+                } catch (error) {
+                    console.error('خطأ في تحميل الصوت:', error);
+                    this.showError('حدث خطأ أثناء تحميل الصوت');
+                }
+            },
+
+            // تحميل صوت رسالة محددة
+            async downloadMessageAudio(text) {
+                if (!text || text.trim() === '') {
+                    this.showError('لا يوجد نص للتحويل إلى صوت');
+                    return;
+                }
+
+                // التحقق من توفر الطلبات
+                if (!this.useRequest()) {
+                    return;
+                }
+
+                try {
+                    this.showSuccess('جاري تحويل النص إلى صوت للتحميل...');
+
+                    const ttsEndpoint = "https://lahja-dev-resource.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview";
+
+                    const requestBody = {
+                        model: this.config.ttsDeployment,
+                        input: text,
+                        voice: this.config.voice,
+                        speed: this.config.speechSpeed,
+                        response_format: "mp3"
+                    };
+
+                    const ttsResponse = await fetch(ttsEndpoint, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer 4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM"
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+
+                    if (!ttsResponse.ok) {
+                        throw new Error(`خطأ في خدمة الصوت (${ttsResponse.status})`);
+                    }
+
+                    const audioBlob = await ttsResponse.blob();
+                    const audioUrl = URL.createObjectURL(audioBlob);
+
+                    // تحميل الملف
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = audioUrl;
+                    
+                    // إنشاء اسم ملف مع نص مختصر
+                    const shortText = text.substring(0, 30).replace(/[^\w\u0600-\u06FF]/g, '_');
+                    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                    const filename = `مساعد-لهجة-${shortText}-${timestamp}.mp3`;
+                    
+                    downloadLink.download = filename;
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+
+                    // تنظيف الذاكرة بعد التحميل
+                    setTimeout(() => {
+                        URL.revokeObjectURL(audioUrl);
+                    }, 1000);
+
+                    this.showSuccess('تم تحميل الملف الصوتي بنجاح');
+
+                } catch (error) {
+                    console.error('خطأ في تحميل صوت الرسالة:', error);
+                    this.showError(`خطأ في تحميل الصوت: ${error.message}`);
                 }
             },
 
@@ -1788,29 +2022,37 @@
                 });
             },
 
-            // إعداد مستمعي الأحداث
+            // إعداد مستمعي الأحداث - مصححة لمنع التكرار
             setupEventListeners() {
+                // إزالة المستمعين السابقين إذا كانوا موجودين
+                this.removeEventListeners();
+
                 // حفظ الإعدادات
-                document.getElementById('saveConfig').addEventListener('click', () => {
+                this.addEventListener('saveConfig', 'click', () => {
                     this.saveConfiguration();
                 });
 
                 // إرسال رسالة
-                document.getElementById('sendButton').addEventListener('click', () => {
+                this.addEventListener('sendButton', 'click', () => {
                     this.sendMessage();
                 });
 
                 // إرسال بالضغط على Enter
-                document.getElementById('messageInput').addEventListener('keydown', (e) => {
+                this.addEventListener('messageInput', 'keydown', (e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
                         this.sendMessage();
                     }
                 });
 
+                // تحميل الصوت
+                this.addEventListener('downloadAudioBtn', 'click', () => {
+                    this.downloadCurrentAudio();
+                });
+
                 // تبديل وضع الإدخال
                 document.querySelectorAll('.mode-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
+                    this.addTempEventListener(btn, 'click', (e) => {
                         document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
                         e.target.classList.add('active');
                         this.state.inputMode = e.target.dataset.mode;
@@ -1819,13 +2061,13 @@
                 });
 
                 // تسجيل الصوت
-                document.getElementById('startRecording').addEventListener('click', () => {
+                this.addEventListener('startRecording', 'click', () => {
                     this.toggleRecording();
                 });
 
                 // اختيار اللهجة
                 document.querySelectorAll('.dialect-option').forEach(option => {
-                    option.addEventListener('click', () => {
+                    this.addTempEventListener(option, 'click', () => {
                         document.querySelectorAll('.dialect-option').forEach(opt => {
                             opt.classList.remove('active');
                         });
@@ -1837,7 +2079,7 @@
 
                 // اختيار الصوت
                 document.querySelectorAll('.voice-option').forEach(option => {
-                    option.addEventListener('click', () => {
+                    this.addTempEventListener(option, 'click', () => {
                         document.querySelectorAll('.voice-option').forEach(opt => {
                             opt.classList.remove('active');
                         });
@@ -1848,66 +2090,66 @@
                 });
 
                 // تفعيل/تعطيل النطق الصوتي
-                document.getElementById('ttsEnabled').addEventListener('change', (e) => {
+                this.addEventListener('ttsEnabled', 'change', (e) => {
                     this.config.ttsEnabled = e.target.checked;
                     this.saveConfig();
                 });
 
                 // سرعة الصوت
-                document.getElementById('speechSpeed').addEventListener('input', (e) => {
+                this.addEventListener('speechSpeed', 'input', (e) => {
                     this.config.speechSpeed = parseFloat(e.target.value);
                     this.updateSpeedValue();
                     this.saveConfig();
                 });
 
                 // تجربة الصوت
-                document.getElementById('testVoice').addEventListener('click', () => {
+                this.addEventListener('testVoice', 'click', () => {
                     this.testVoice();
                 });
 
                 // مسح المحادثة
-                document.getElementById('clearChat').addEventListener('click', () => {
+                this.addEventListener('clearChat', 'click', () => {
                     this.clearCurrentConversation();
                 });
 
                 // محادثة جديدة
-                document.getElementById('newChatBtn').addEventListener('click', () => {
+                this.addEventListener('newChatBtn', 'click', () => {
                     this.createNewConversation();
                 });
 
                 // تبديل السمة
-                document.getElementById('toggleTheme').addEventListener('click', () => {
+                this.addEventListener('toggleTheme', 'click', () => {
                     this.toggleTheme();
                 });
 
-                document.getElementById('toggleThemeSmall').addEventListener('click', () => {
+                this.addEventListener('toggleThemeSmall', 'click', () => {
                     this.toggleTheme();
                 });
 
-                // فتح/إغلاق الإعدادات - الأزرار الجديدة
-                document.getElementById('headerSettingsBtn').addEventListener('click', () => {
+                // فتح/إغلاق الإعدادات
+                this.addEventListener('headerSettingsBtn', 'click', () => {
                     this.openSettings();
                 });
 
-                document.getElementById('openSettings').addEventListener('click', () => {
+                this.addEventListener('openSettings', 'click', () => {
                     this.openSettings();
                 });
 
-                document.getElementById('settingsBtn').addEventListener('click', () => {
+                this.addEventListener('settingsBtn', 'click', () => {
                     this.openSettings();
                 });
 
-                document.getElementById('closeSettings').addEventListener('click', () => {
+                this.addEventListener('closeSettings', 'click', () => {
                     this.closeSettings();
                 });
 
                 // تبديل القائمة الجانبية
-                document.getElementById('menuToggle').addEventListener('click', () => {
+                this.addEventListener('menuToggle', 'click', () => {
                     this.toggleSidebar();
                 });
 
                 // إغلاق الإعدادات بالنقر خارجها
-                document.addEventListener('click', (e) => {
+                this.addTempEventListener(document, 'click', (e) => {
                     const settingsPanel = document.getElementById('settingsPanel');
                     const headerSettingsBtn = document.getElementById('headerSettingsBtn');
                     const openSettingsBtn = document.getElementById('openSettings');
@@ -1923,27 +2165,60 @@
                 });
 
                 // إغلاق الإعدادات بالضغط على زر Escape
-                document.addEventListener('keydown', (e) => {
+                this.addTempEventListener(document, 'keydown', (e) => {
                     if (e.key === 'Escape') {
                         this.closeSettings();
                     }
                 });
 
                 // أحداث نافذة الاشتراك
-                document.getElementById('cancelSubscription').addEventListener('click', () => {
+                this.addEventListener('cancelSubscription', 'click', () => {
                     this.hideSubscriptionModal();
                 });
 
-                document.getElementById('confirmSubscription').addEventListener('click', () => {
+                this.addEventListener('confirmSubscription', 'click', () => {
                     this.processSubscription();
                 });
 
                 // إدخال رمز التفعيل
-                document.getElementById('subscriptionToken').addEventListener('keydown', (e) => {
+                this.addEventListener('subscriptionToken', 'keydown', (e) => {
                     if (e.key === 'Enter') {
                         this.processSubscription();
                     }
                 });
+            },
+
+            // إضافة مستمع حدث مع تتبع
+            addEventListener(elementId, eventType, handler) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    // إزالة المستمع السابق إذا كان موجوداً
+                    if (this.state.eventListeners[elementId]) {
+                        element.removeEventListener(eventType, this.state.eventListeners[elementId]);
+                    }
+                    
+                    // إضافة المستمع الجديد وتتبعه
+                    this.state.eventListeners[elementId] = handler;
+                    element.addEventListener(eventType, handler);
+                }
+            },
+
+            // إضافة مستمع مؤقت (لا يتم تتبعه)
+            addTempEventListener(element, eventType, handler) {
+                if (element) {
+                    element.addEventListener(eventType, handler);
+                }
+            },
+
+            // إزالة جميع المستمعين
+            removeEventListeners() {
+                Object.keys(this.state.eventListeners).forEach(elementId => {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        // لا يمكن إزالة مستمع دون معرفة نوع الحدث، لذا نتركها للتهيئة الجديدة
+                    }
+                });
+                this.state.eventListeners = {};
             },
 
             // معالجة الاشتراك
@@ -2203,8 +2478,6 @@
                         headers: {
                             "Content-Type": "application/json",
                             "Authorization": "Bearer 4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM"
-
-                            // "api-key": this.config.apiKey
                         },
                         body: JSON.stringify(requestBody)
                     });
@@ -2229,6 +2502,9 @@
                     }
 
                     const audioUrl = URL.createObjectURL(audioBlob);
+
+                    // حفظ رابط الصوت الحالي للتحميل
+                    this.state.currentAudioUrl = audioUrl;
 
                     // إعداد مشغل الصوت
                     this.setupAudioPlayer(audioUrl);
@@ -2259,13 +2535,12 @@
                 // تنظيف الموارد السابقة
                 if (this.state.audio) {
                     this.state.audio.pause();
-                    if (this.state.currentAudioUrl) {
+                    if (this.state.currentAudioUrl && this.state.currentAudioUrl !== audioUrl) {
                         URL.revokeObjectURL(this.state.currentAudioUrl);
                     }
                 }
 
                 this.state.audio = new Audio(audioUrl);
-                this.state.currentAudioUrl = audioUrl;
                 this.state.isPlaying = false;
 
                 // تحديث الواجهة عند بدء التشغيل
@@ -2278,10 +2553,6 @@
                 this.state.audio.addEventListener('ended', () => {
                     this.state.isPlaying = false;
                     this.setSpeakingUI(false);
-                    if (this.state.currentAudioUrl) {
-                        URL.revokeObjectURL(this.state.currentAudioUrl);
-                        this.state.currentAudioUrl = null;
-                    }
                 });
 
                 this.state.audio.addEventListener('error', (e) => {
@@ -2313,7 +2584,7 @@
                     return;
                 }
 
-                const testText = "     ياهلا والله، أنا لهجة 🤠 نموذج ذكي مطور من شركة أسس الذكاء الرقمي، وظيفتي أجاوبك وأساعدك بأي شي تحتاجه وباللهجة  بعد، عشان تحس إنك تكلم واحد من ربعك. وش ودك نسولف عنّه الحين؟؟";
+                const testText = "ياهلا والله، أنا لهجة 🤠 نموذج ذكي مطور من شركة أسس الذكاء الرقمي، وظيفتي أجاوبك وأساعدك بأي شي تحتاجه وباللهجة بعد، عشان تحس إنك تكلم واحد من ربعك. وش ودك نسولف عنّه الحين؟؟";
 
                 try {
                     await this.speakResponse(testText);
@@ -2386,6 +2657,9 @@
                             <div class="message-actions">
                                 <button class="message-action" title="استمع إلى الرد" onclick="SaudiVoiceAssistant.speakResponse('${cleanContent}')">
                                     <i class="fas fa-volume-up"></i>
+                                </button>
+                                <button class="message-action download-audio" title="تحميل الصوت" onclick="SaudiVoiceAssistant.downloadMessageAudio('${cleanContent}')">
+                                    <i class="fas fa-download"></i>
                                 </button>
                             </div>
                             ` : ''}
@@ -2821,5 +3095,7 @@
             SaudiVoiceAssistant.init();
         });
     </script>
+            <script src="ModulLahja.js"></script>
+
 </body>
 </html>

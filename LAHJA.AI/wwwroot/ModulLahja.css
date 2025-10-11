@@ -1,0 +1,383 @@
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI','Noto Sans Arabic',sans-serif;
+        }
+
+        /* زر فتح النافذة المنبثقة */
+        .popup-opener {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgb(11, 186, 131);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 10000;
+        }
+
+        .popup-opener:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* النافذة المنبثقة */
+        .voice-popup {
+            position: fixed;
+            bottom: 90px;
+            left: 20px;
+            width: 400px;
+            height: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 10001;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .voice-popup.active {
+            display: flex;
+            animation: popupSlide 0.3s ease-out;
+        }
+
+        @keyframes popupSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* رأس النافذة */
+        .popup-header {
+            background: rgb(11, 186, 131);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popup-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .popup-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .popup-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .popup-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        /* محتوى النافذة */
+        .popup-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #f8f9fa;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+            background: radial-gradient(circle at 20% 50%, rgba(11, 186, 131, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(11, 186, 131, 0.3) 0%, transparent 40%);
+        }
+
+        /* زر الميكروفون المصغر */
+        .mic-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .circle-outer {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(11, 186, 131, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .circle-middle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: rgba(11, 186, 131, 0.25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .circle-inner {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mic-svg {
+            width: 30px;
+            height: 30px;
+            fill: rgb(11, 186, 131);
+            transition: all 0.3s ease;
+        }
+
+        .circle-outer.listening {
+            animation: rotatePulse 1.5s infinite linear;
+        }
+
+        @keyframes rotatePulse {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(5deg) scale(1.05); }
+            50% { transform: rotate(0deg) scale(1.1); }
+            75% { transform: rotate(-5deg) scale(1.05); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+
+        .circle-outer.speaking .mic-svg {
+            animation: speakIcon 0.8s infinite alternate;
+        }
+
+        @keyframes speakIcon {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-5px) scale(1.1); }
+        }
+
+        .pulse-wave {
+            position: absolute;
+            border: 2px solid rgba(11, 186, 131, 0.5);
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            top: 0;
+            left: 0;
+            animation: pulse 3s infinite ease-in-out;
+            opacity: 0.7;
+        }
+
+        .pulse-wave:nth-child(2) { animation-delay: 1s; }
+        .pulse-wave:nth-child(3) { animation-delay: 2s; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.3); opacity: 0.2; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+
+        /* أمواج الصوت */
+        .wave {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 30px;
+            margin-top: 10px;
+        }
+
+        .wave span {
+            display: inline-block;
+            width: 3px;
+            height: 15px;
+            background: rgb(11, 186, 131);
+            margin: 0 3px;
+            border-radius: 2px;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+
+        .wave span:nth-child(2) { animation-delay: 0.1s; }
+        .wave span:nth-child(3) { animation-delay: 0.2s; }
+        .wave span:nth-child(4) { animation-delay: 0.3s; }
+        .wave span:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes wave {
+            0%,40%,100% { transform: scaleY(0.6); }
+            20% { transform: scaleY(1.5); }
+        }
+
+        /* حالة النظام */
+        .status {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #4a5568;
+            min-height: 20px;
+            padding: 0 10px;
+        }
+
+        /* أزرار التحكم */
+        .session-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .session-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            background: rgba(11, 186, 131, 0.1);
+            color: rgb(11, 186, 131);
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .session-btn:hover {
+            background: rgba(11, 186, 131, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .session-btn.active {
+            background: rgb(11, 186, 131);
+            color: white;
+        }
+
+        /* مؤشر الجلسة */
+        .session-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff4757;
+            transition: all 0.3s ease;
+        }
+
+        .session-indicator.active {
+            background: #2ed573;
+            box-shadow: 0 0 8px rgba(46, 213, 115, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        /* مؤشر الإذن */
+        .permission-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff4757;
+            transition: all 0.3s ease;
+        }
+
+        .permission-indicator.granted {
+            background: #2ed573;
+            box-shadow: 0 0 8px rgba(46, 213, 115, 0.5);
+        }
+
+        /* رسائل التنبيه */
+        .browser-warning {
+            background: #ff4757;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 12px;
+            text-align: center;
+            margin: 10px;
+            display: none;
+        }
+
+        .permission-notice {
+            background: #ffa500;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 12px;
+            text-align: center;
+            margin: 10px;
+            display: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* الوضع الليلي للنافذة */
+        .voice-popup.night-mode {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
+        .voice-popup.night-mode .popup-content {
+            background: #1a202c;
+        }
+
+        .voice-popup.night-mode .circle-inner {
+            background: #4a5568;
+        }
+
+        .voice-popup.night-mode .status {
+            color: #a0aec0;
+        }
+
+        .voice-popup.night-mode .session-btn {
+            background: rgba(11, 186, 131, 0.15);
+            color: rgb(11, 186, 131);
+        }
+
+        .voice-popup.night-mode .session-btn.active {
+            background: rgb(11, 186, 131);
+            color: white;
+        }

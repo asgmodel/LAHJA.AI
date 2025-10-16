@@ -365,8 +365,8 @@
     <script>
         // API Configuration
         const API_KEYS = {
-            tts: "4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM",
-            chat: "4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM"
+            tts: "E7k8z3ADEUi2DZ1dl9pHlSTeUSoKb3jVjg5zYDAPNHBHKBfXlbTFJQQJ99BJACHYHv6XJ3w3AAAAACOGyF4Z",
+            chat: "E7k8z3ADEUi2DZ1dl9pHlSTeUSoKb3jVjg5zYDAPNHBHKBfXlbTFJQQJ99BJACHYHv6XJ3w3AAAAACOGyF4Z"
         };
 
         // DOM Elements
@@ -682,7 +682,7 @@
 
         // API Functions
         async function callGPTAPI(text) {
-            const response = await fetch("https://lahja-dev-resource.cognitiveservices.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2025-01-01-preview", {
+            const response = await fetch("https://lahja-dev-resource2.cognitiveservices.azure.com/openai/deployments/Wasm-V1/chat/completions?api-version=2025-01-01-preview", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -702,7 +702,7 @@
                     max_tokens: 4096,
                     temperature: 0.8,
                     top_p: 1,
-                    model: "gpt-4o"
+                    model: "Wasm-V1"
                 })
             });
 
@@ -718,7 +718,7 @@
             const speed = parseFloat(speedRange.value);
             const voice = voiceSelect.value;
 
-            const response = await fetch("https://lahja-dev-resource.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview", {
+            const response = await fetch("https://lahja-dev-resource2.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

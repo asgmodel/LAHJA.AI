@@ -184,11 +184,11 @@
             setSpeakingUI();
 
             try {
-                const response = await fetch("https://lahja-dev-resource.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview", {
+                const response = await fetch("https://lahja-dev-resource2.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Bearer 4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM"
+                        "Authorization": "Bearer E7k8z3ADEUi2DZ1dl9pHlSTeUSoKb3jVjg5zYDAPNHBHKBfXlbTFJQQJ99BJACHYHv6XJ3w3AAAAACOGyF4Z"
                     },
                     body: JSON.stringify({
                         model: "LAHJA-V1",
@@ -235,11 +235,11 @@
             try {
                 status.textContent = 'جاري المعالجة...';
 
-                const response = await fetch("https://lahja-dev-resource.cognitiveservices.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2025-01-01-preview", {
+                const response = await fetch("https://lahja-dev-resource2.cognitiveservices.azure.com/openai/deployments/Wasm-V1/chat/completions?api-version=2025-01-01-preview", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Bearer 4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM"
+                        "Authorization": "Bearer E7k8z3ADEUi2DZ1dl9pHlSTeUSoKb3jVjg5zYDAPNHBHKBfXlbTFJQQJ99BJACHYHv6XJ3w3AAAAACOGyF4Z"
                     },
                     body: JSON.stringify({
                         messages: [
@@ -259,7 +259,7 @@
                         max_tokens: 4096,
                         temperature: 0.75,
                         top_p: 1,
-                        model: "gpt-4o"
+                        model: "Wasm-V1"
                     })
                 });
 

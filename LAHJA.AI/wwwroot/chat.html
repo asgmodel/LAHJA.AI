@@ -377,14 +377,14 @@
 
 
         async function askAzureOpenAI(prompt) {
-            const endpoint = "https://lahja-dev-resource.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2023-03-15-preview";
+            const endpoint = "https://lahja-dev-resource2.openai.azure.com/openai/deployments/Wasm-V1/chat/completions?api-version=2023-03-15-preview";
 
             try {
                 const response = await fetch(endpoint, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "api-key": "4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM"
+                        "api-key": "E7k8z3ADEUi2DZ1dl9pHlSTeUSoKb3jVjg5zYDAPNHBHKBfXlbTFJQQJ99BJACHYHv6XJ3w3AAAAACOGyF4Z"
                     },
                     body: JSON.stringify({
                         messages: [
@@ -419,8 +419,8 @@
 
 
         async function textToSpeech(text, voice = "alloy", speed = 1) {
-            const API_KEY = "4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM";   // ضع مفتاح Azure هنا
-            const ENDPOINT = "https://lahja-dev-resource.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview";
+            const API_KEY = "E7k8z3ADEUi2DZ1dl9pHlSTeUSoKb3jVjg5zYDAPNHBHKBfXlbTFJQQJ99BJACHYHv6XJ3w3AAAAACOGyF4Z";   // ضع مفتاح Azure هنا
+            const ENDPOINT = "https://lahja-dev-resource2.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview";
             const data = {
                 model: "LAHJA-V1",
                 input: text,

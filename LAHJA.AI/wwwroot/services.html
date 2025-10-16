@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خدمات LAHJA.AI - منصة الذكاء الاصطناعي المتكاملة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #ffffff;
+            --secondary: #10b981;
+            --accent: #059669;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        [data-theme="dark"] {
+            --primary: #1f2937;
+            --secondary: #10b981;
+            --accent: #34d399;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --background: #111827;
+            --card-bg: #374151;
+            --border: #4b5563;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+        }
+
+        .nav-container {
+            background-color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        .service-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            position: relative;
+        }
+
+            .service-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.1) 100%);
+                z-index: 0;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .service-card:hover::before {
+                opacity: 1;
+            }
+
+            .service-card:hover {
+                transform: translateY(-10px) scale(1.02);
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .nav-link {
+            position: relative;
+            color: var(--text-secondary);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .nav-link::after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                right: 1rem;
+                width: 0;
+                height: 2px;
+                background-color: var(--secondary);
+                transition: width 0.3s ease;
+            }
+
+            .nav-link:hover::after {
+                width: calc(100% - 2rem);
+            }
+
+            .nav-link:hover {
+                color: var(--secondary);
+            }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+            .theme-toggle:hover {
+                transform: scale(1.1) rotate(15deg);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+
+        .demo-btn {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+            .demo-btn:hover {
+                transform: translateY(-3px) scale(1.05);
+                box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+            }
+
+        .stats-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+            .stats-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 100%;
+                height: 4px;
+                background: linear-gradient(90deg, var(--secondary), var(--accent));
+            }
+
+            .stats-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            }
+
+        .stats-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .typing-animation {
+            overflow: hidden;
+            border-right: 3px solid var(--secondary);
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        @keyframes blink-caret {
+            from, to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: var(--secondary)
+            }
+        }
+
+        .feature-badge {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-block;
+            margin: 5px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .chat-bubble {
+            max-width: 70%;
+            padding: 1.2rem 1.5rem;
+            border-radius: 20px;
+            margin: 1rem 0;
+            position: relative;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .user-bubble {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-bubble {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-desktop {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        .service-hero {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .service-hero::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 100%;
+                height: 100%;
+                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="%23ffffff" opacity="0.1"><polygon points="1000,100 1000,0 0,100"></polygon></svg>');
+                background-size: cover;
+            }
+
+        .service-category {
+            margin-bottom: 80px;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .service-feature {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+
+        .pricing-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .pricing-card.popular {
+                border: 2px solid var(--secondary);
+                transform: scale(1.05);
+            }
+
+                .pricing-card.popular::before {
+                    content: 'الأكثر شيوعاً';
+                    position: absolute;
+                    top: 20px;
+                    left: -30px;
+                    background: var(--secondary);
+                    color: white;
+                    padding: 5px 40px;
+                    transform: rotate(-45deg);
+                    font-size: 0.8rem;
+                    font-weight: bold;
+                }
+
+            .pricing-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .process-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+            .process-step:not(:last-child)::after {
+                content: '';
+                position: absolute;
+                bottom: -40px;
+                right: 30px;
+                width: 2px;
+                height: 40px;
+                background: var(--secondary);
+            }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-left: 20px;
+            flex-shrink: 0;
+        }
+
+        .testimonial-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+            .testimonial-card::before {
+                content: '"';
+                position: absolute;
+                top: 10px;
+                right: 20px;
+                font-size: 5rem;
+                color: var(--secondary);
+                opacity: 0.2;
+                font-family: serif;
+            }
+
+        .client-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-left: 15px;
+        }
+
+        .service-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .service-tab {
+            padding: 12px 24px;
+            border-radius: 25px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .service-tab.active, .service-tab:hover {
+                background: linear-gradient(135deg, var(--secondary), var(--accent));
+                color: white;
+                border-color: transparent;
+            }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="nav-container sticky top-0 z-50 shadow-lg py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <i class="fas fa-robot text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-green-600">LAHJA.AI</h1>
+                    <p class="text-sm text-green-500">منصة الذكاء الاصطناعي المتكاملة</p>
+                </div>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="nav-desktop">
+                <ul class="flex space-x-8 space-x-reverse">
+                    <li><a href="index.html" class="nav-link">الرئيسية</a></li>
+                    <li><a href="projects.html" class="nav-link">المشاريع</a></li>
+                    <li><a href="robots.html" class="nav-link">الروبوتات</a></li>
+                    <li><a href="services.html" class="nav-link active">الخدمات</a></li>
+                    <li><a href="demo.html" class="nav-link">التجربة</a></li>
+                    <li><a href="about.html" class="nav-link">من نحن</a></li>
+                    <li><a href="contact.html" class="nav-link">اتصل بنا</a></li>
+                </ul>
+            </nav>
+
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+
+                <!-- Language Toggle -->
+                <button class="theme-toggle">
+                    <i class="fas fa-globe"></i>
+                </button>
+
+                <!-- Mobile Navigation -->
+                <div class="mobile-menu">
+                    <button id="menuToggle" class="theme-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div id="mobileNav" class="absolute top-16 right-0 w-64 bg-white shadow-2xl rounded-2xl hidden" style="background-color: var(--card-bg); border: 1px solid var(--border);">
+                        <ul class="py-4">
+                            <li class="border-b" style="border-color: var(--border);">
+                                <a href="index.html" class="block py-4 px-6 hover:bg-green-50 transition-all duration-300 flex items-center">
+                                    <i class="fas fa-home ml-3 text-green-600"></i>
+                                    الرئيسية
+                                </a>
+                            </li>
+                            <li class="border-b" style="border-color: var(--border);">
+                                <a href="projects.html" class="block py-4 px-6 hover:bg-green-50 transition-all duration-300 flex items-center">
+                                    <i class="fas fa-project-diagram ml-3 text-green-600"></i>
+                                    المشاريع
+                                </a>
+                            </li>
+                            <li class="border-b" style="border-color: var(--border);">
+                                <a href="robots.html" class="block py-4 px-6 hover:bg-green-50 transition-all duration-300 flex items-center">
+                                    <i class="fas fa-robot ml-3 text-green-600"></i>
+                                    الروبوتات
+                                </a>
+                            </li>
+                            <li class="border-b" style="border-color: var(--border);">
+                                <a href="services.html" class="block py-4 px-6 hover:bg-green-50 transition-all duration-300 flex items-center">
+                                    <i class="fas fa-cogs ml-3 text-green-600"></i>
+                                    الخدمات
+                                </a>
+                            </li>
+                            <li class="border-b" style="border-color: var(--border);">
+                                <a href="demo.html" class="block py-4 px-6 hover:bg-green-50 transition-all duration-300 flex items-center">
+                                    <i class="fas fa-play ml-3 text-green-600"></i>
+                                    التجربة
+                                </a>
+                            </li>
+                            <li class="border-b" style="border-color: var(--border);">
+                                <a href="about.html" class="block py-4 px-6 hover:bg-green-50 transition-all duration-300 flex items-center">
+                                    <i class="fas fa-users ml-3 text-green-600"></i>
+                                    من نحن
+                                </a>
+                            </li>
+                            <li>
+                                <a href="contact.html" class="block py-4 px-6 hover:bg-green-50 transition-all duration-300 flex items-center">
+                                    <i class="fas fa-envelope ml-3 text-green-600"></i>
+                                    اتصل بنا
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Services Hero Section -->
+    <section class="service-hero">
+        <div class="max-w-7xl mx-auto px-6">
+            <h1 class="text-5xl font-bold mb-6">خدمات <span class="text-yellow-300">لهجة</span> المتكاملة</h1>
+            <p class="text-xl max-w-3xl mx-auto mb-8 opacity-90">
+                اكتشف مجموعة خدماتنا المتكاملة المدعومة باللهجات السعودية، مصممة لتلبية احتياجاتك المختلفة
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#services" class="demo-btn text-lg px-8 py-4">
+                    <i class="fas fa-cogs ml-3"></i>
+                    استكشف الخدمات
+                </a>
+                <a href="#pricing" class="demo-btn text-lg px-8 py-4" style="background: transparent; border: 2px solid white; color: white;">
+                    <i class="fas fa-tags ml-3"></i>
+                    خطط الأسعار
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Tabs -->
+    <section class="py-16 px-6" style="background-color: var(--background);">
+        <div class="max-w-7xl mx-auto">
+            <div class="service-tabs">
+                <button class="service-tab active" data-category="all">الكل</button>
+                <button class="service-tab" data-category="voice">الخدمات الصوتية</button>
+                <button class="service-tab" data-category="text">الخدمات النصية</button>
+                <button class="service-tab" data-category="ai">الذكاء الاصطناعي</button>
+                <button class="service-tab" data-category="integration">التكامل</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 px-6" style="background-color: var(--background);">
+        <div class="max-w-7xl mx-auto">
+            <!-- Voice Services -->
+            <div class="service-category" data-category="voice">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">الخدمات <span class="text-green-500">الصوتية</span></h2>
+                    <p class="text-xl max-w-2xl mx-auto" style="color: var(--text-secondary);">
+                        خدمات تحويل النص إلى كلام وتحويل الكلام إلى نص بدقة عالية وباللهجات السعودية المختلفة
+                    </p>
+                </div>
+
+                <div class="service-grid">
+                    <!-- Service 1 -->
+                    <div class="service-card">
+                        <div class="p-8">
+                            <div class="service-icon">
+                                <i class="fas fa-microphone-alt"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-center mb-4">تحويل النص إلى كلام</h3>
+                            <p class="text-lg text-center mb-6" style="color: var(--text-secondary);">
+                                تحويل النص إلى كلام طبيعي باللهجات السعودية المختلفة بدقة عالية
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-2 mb-6">
+                                <span class="feature-badge">لهجات متعددة</span>
+                                <span class="feature-badge">جودة عالية</span>
+                                <span class="feature-badge">تحكم كامل</span>
+                            </div>
+                            <div class="demo-btn w-full">
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                                تجربة مباشرة
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service 2 -->
+                    <div class="service-card">
+                        <div class="p-8">
+                            <div class="service-icon">
+                                <i class="fas fa-microphone"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-center mb-4">تحويل الكلام إلى نص</h3>
+                            <p class="text-lg text-center mb-6" style="color: var(--text-secondary);">
+                                تحويل الكلام المنطوق إلى نص مكتوب بدقة مع فهم اللهجات السعودية
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-2 mb-6">
+                                <span class="feature-badge">دقة عالية</span>
+                                <span class="feature-badge">تحليل سياقي</span>
+                                <span class="feature-badge">معالجة فورية</span>
+                            </div>
+                            <div class="demo-btn w-full">
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                                تجربة مباشرة
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service 3 -->
+                    <div class="service-card">
+                        <div class="p-8">
+                            <div class="service-icon">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-center mb-4">المساعد الصوتي</h3>
+                            <p class="text-lg text-center mb-6" style="color: var(--text-secondary);">
+                                مساعد صوتي ذكي باللهجة السعودية للرد على الاستفسارات وتنفيذ المهام
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-2 mb-6">
+                                <span class="feature-badge">تفاعل طبيعي</span>
+                                <span class="feature-badge">مهام متعددة</span>
+                                <span class="feature-badge">تكامل سهل</span>
+                            </div>
+                            <div class="demo-btn w-full">
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                                تجربة مباشرة
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text Services -->
+            <div class="service-category" data-category="text">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">الخدمات <span class="text-green-500">النصية</span></h2>
+                    <p class="text-xl max-w-2xl mx-auto" style="color: var(--text-secondary);">
+                        خدمات معالجة النصوص والترجمة والتحليل باستخدام الذكاء الاصطناعي المتقدم
+                    </p>
+                </div>
+
+                <div class="service-grid">
+                    <!-- Service 4 -->
+                    <div class="service-card">
+                        <div class="p-8">
+                            <div class="service-icon">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-center mb-4">الترجمة الآلية</h3>
+                            <p class="text-lg text-center mb-6" style="color: var(--text-secondary);">
+                                ترجمة نصوص دقيقة بين العربية واللغات الأخرى مع الحفاظ على المعنى
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-2 mb-6">
+                                <span class="feature-badge">لغات متعددة</span>
+                                <span class="feature-badge">دقة عالية</span>
+                                <span class="feature-badge">سياق ثقافي</span>
+                            </div>
+                            <div class="demo-btn w-full">
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                                تجربة مباشرة
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service 5 -->
+                    <div class="service-card">
+                        <div class="p-8">
+                            <div class="service-icon">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-center mb-4">توليد المحتوى</h3>
+                            <p class="text-lg text-center mb-6" style="color: var(--text-secondary);">
+                                إنشاء محتوى نصي متميز باللغة العربية مع مراعاة اللهجات السعودية
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-2 mb-6">
+                                <span class="feature-badge">أنماط متعددة</span>
+                                <span class="feature-badge">أصالة لغوية</span>
+                                <span class="feature-badge">تخصيص كامل</span>
+                            </div>
+                            <div class="demo-btn w-full">
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                                تجربة مباشرة
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service 6 -->
+                    <div class="service-card">
+                        <div class="p-8">
+                            <div class="service-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-center mb-4">تحليل المشاعر</h3>
+                            <p class="text-lg text-center mb-6" style="color: var(--text-secondary);">
+                                تحليل النصوص لفهم المشاعر والآراء مع مراعاة السياق الثقافي السعودي
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-2 mb-6">
+                                <span class="feature-badge">تحليل دقيق</span>
+                                <span class="feature-badge">تقارير تفصيلية</span>
+                                <span class="feature-badge">رؤى قابلة للتنفيذ</span>
+                            </div>
+                            <div class="demo-btn w-full">
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                                تجربة مباشرة
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Services -->
+            <div class="service-category" data-category="ai">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">خدمات <span class="text-green-500">الذكاء الاصطناعي</span></h2>
+                    <p class="text-xl max-w-2xl mx-auto" style="color: var(--text-secondary);">
+                        حلول الذكاء الاصطناعي المتقدمة المدعومة باللهجات السعودية لتلبية احتياجاتك
+                    </p>
+                </div>
+
+                <div class="service-grid">
+                    <!-- Service 7 -->
+                    <div class="service-card">
+                        <div class="p-8">
+                            <div class="service-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-center mb-4">المساعد الذكي</h3>
+                            <p class="text-lg text-center mb-6" style="color: var(--text-secondary);">
+                                مساعد ذكي متكامل باللهجة السعودية للرد على الاستفسارات وإنجاز المهام
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-2 mb-6">
+                                <span class="feature-badge">تفاعل طبيعي</span>
+                                <span class="feature-badge">تعلم مستمر</span>
+                                <span class="feature-badge">تكامل سهل</span>
+                            </div>
+                            <div class="demo-btn w-full">
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                                تجربة مباشرة
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service 8 -->
+                    <div class="service-card">
+                        <div class="p-8">
+                            <div class="service-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-center mb-4">التعلم الآلي</h3>
+                            <p class="text-lg text-center mb-6" style="color: var(--text-secondary);">
+                                نماذج تعلم آلي مخصصة لفهم وتحليل البيانات النصية والصوتية السعودية
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-2 mb-6">
+                                <span class="feature-badge">نماذج مخصصة</span>
+                                <span class="feature-badge">تحليل متقدم</span>
+                                <span class="feature-badge">تنبؤات دقيقة</span>
+                            </div>
+                            <div class="demo-btn w-full">
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                                تجربة مباشرة
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service 9 -->
+                    <div class="service-card">
+                        <div class="p-8">
+                            <div class="service-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-center mb-4">البحث الذكي</h3>
+                            <p class="text-lg text-center mb-6" style="color: var(--text-secondary);">
+                                محرك بحث ذكي يفهم الاستعلامات باللهجة السعودية ويقدم نتائج دقيقة
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-2 mb-6">
+                                <span class="feature-badge">فهم سياقي</span>
+                                <span class="feature-badge">نتائج دقيقة</span>
+                                <span class="feature-badge">تصفية ذكية</span>
+                            </div>
+                            <div class="demo-btn w-full">
+                                <i class="fas fa-external-link-alt ml-2"></i>
+                                تجربة مباشرة
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-20 px-6" style="background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-white mb-4">كيف <span class="text-yellow-300">تعمل</span> خدماتنا</h2>
+                <p class="text-xl text-white opacity-90">خطوات بسيطة للحصول على أفضل تجربة مع خدمات LAHJA.AI</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <!-- Step 1 -->
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-2">اختر الخدمة المناسبة</h3>
+                        <p class="text-white opacity-90">اختر من بين مجموعة خدماتنا المتكاملة التي تناسب احتياجاتك</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-2">تخصيص الخدمة</h3>
+                        <p class="text-white opacity-90">قم بتخصيص الخدمة حسب متطلباتك الخاصة واللهجة المطلوبة</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-2">دمج الخدمة</h3>
+                        <p class="text-white opacity-90">ادمج الخدمة في تطبيقاتك أو أنظمتك بسهولة عبر واجهات برمجية بسيطة</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-2">استمتع بالنتائج</h3>
+                        <p class="text-white opacity-90">استمتع بخدمات ذكية وفعالة تدعم اللهجات السعودية وتلبي توقعاتك</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 px-6" style="background-color: var(--background);">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">خطط <span class="text-green-500">الأسعار</span></h2>
+                <p class="text-xl max-w-2xl mx-auto" style="color: var(--text-secondary);">
+                    اختر الخطة التي تناسب احتياجاتك مع إمكانية الترقية في أي وقت
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Basic Plan -->
+                <div class="pricing-card">
+                    <h3 class="text-2xl font-bold mb-4">الخطة الأساسية</h3>
+                    <p class="text-lg mb-6" style="color: var(--text-secondary);">مناسبة للأفراد والمشاريع الصغيرة</p>
+                    <div class="pricing-price">199<span class="text-xl">ر.س/شهر</span></div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            <span>10,000 طلب شهرياً</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            <span>3 لهجات سعودية</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            <span>دعم فني عبر البريد</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-times text-gray-400 ml-2"></i>
+                            <span style="color: var(--text-secondary);">خدمات مخصصة</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-times text-gray-400 ml-2"></i>
+                            <span style="color: var(--text-secondary);">تكامل متقدم</span>
+                        </li>
+                    </ul>
+                    <a href="#" class="demo-btn w-full">اختر الخطة</a>
+                </div>
+
+                <!-- Professional Plan -->
+                <div class="pricing-card popular">
+                    <h3 class="text-2xl font-bold mb-4">الخطة الاحترافية</h3>
+                    <p class="text-lg mb-6" style="color: var(--text-secondary);">مناسبة للشركات والمشاريع المتوسطة</p>
+                    <div class="pricing-price">499<span class="text-xl">ر.س/شهر</span></div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            <span>50,000 طلب شهرياً</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            <span>جميع اللهجات السعودية</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            <span>دعم فني هاتفي</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            <span>خدمات مخصصة</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-times text-gray-400 ml-2"></i>
+                            <span style="color: var(--text-secondary);">تكامل متقدم</span>
+                        </li>
+                    </ul>
+                    <a href="#" class="demo-btn w-full">اختر الخطة</a>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="pricing-card">
+                    <h3 class="text-2xl font-bold mb-4">الخطة المؤسسية</h3>
+                    <p class="text-lg mb-6" style="color: var(--text-secondary);">مناسبة للشركات الكبيرة والمؤسسات</p>
+                    <div class="pricing-price">999<span class="text-xl">ر.س/شهر</span></div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            <span>طلبات غير محدودة</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            <span>جميع اللهجات السعودية</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            <span>دعم فني مخصص 24/7</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            <span>خدمات مخصصة</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 ml-2"></i>
+                            <span>تكامل متقدم</span>
+                        </li>
+                    </ul>
+                    <a href="#" class="demo-btn w-full">اختر الخطة</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+
+    <!-- CTA Section -->
+    <section class="py-20 px-6" style="background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold text-white mb-6">جاهز لبدء رحلتك مع <span class="text-yellow-300">لهجة</span>؟</h2>
+            <p class="text-xl text-white opacity-90 mb-8">
+                انضم إلى المئات من العملاء الراضين عن خدماتنا واستمتع بتجربة ذكاء اصطناعي مدعوم باللهجات السعودية
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <a href="contact.html" class="demo-btn text-lg px-8 py-4">
+                    <i class="fas fa-paper-plane ml-3"></i>
+                    اتصل بنا الآن
+                </a>
+                <a href="demo.html" class="demo-btn text-lg px-8 py-4" style="background: transparent; border: 2px solid white; color: white;">
+                    <i class="fas fa-play ml-3"></i>
+                    جرب الخدمات مجاناً
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6" style="background-color: var(--primary); border-top: 1px solid var(--border);">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-3 space-x-reverse mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+                            <i class="fas fa-robot text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-green-600">LAHJA.AI</h3>
+                            <p class="text-sm text-green-500">منصة الذكاء الاصطناعي</p>
+                        </div>
+                    </div>
+                    <p class="text-sm" style="color: var(--text-secondary);">
+                        منصة رائدة في توليد الأصوات باللهجات السعودية باستخدام أحدث تقنيات الذكاء الاصطناعي.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-4">الخدمات</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm hover:text-green-500 transition" style="color: var(--text-secondary);">تحويل النص إلى كلام</a></li>
+                        <li><a href="#" class="text-sm hover:text-green-500 transition" style="color: var(--text-secondary);">المحادثة التفاعلية</a></li>
+                        <li><a href="#" class="text-sm hover:text-green-500 transition" style="color: var(--text-secondary);">تحويل الكلام إلى نص</a></li>
+                        <li><a href="#" class="text-sm hover:text-green-500 transition" style="color: var(--text-secondary);">الروبوتات الذكية</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-4">المشاريع</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm hover:text-green-500 transition" style="color: var(--text-secondary);">LAHJA Speech</a></li>
+                        <li><a href="#" class="text-sm hover:text-green-500 transition" style="color: var(--text-secondary);">WASM T2T</a></li>
+                        <li><a href="#" class="text-sm hover:text-green-500 transition" style="color: var(--text-secondary);">LAHJA Pro</a></li>
+                        <li><a href="#" class="text-sm hover:text-green-500 transition" style="color: var(--text-secondary);">Studio LAHJA</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-4">اتصل بنا</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center text-sm" style="color: var(--text-secondary);">
+                            <i class="fas fa-envelope ml-2 text-green-500"></i>
+                            info@lahja.ai
+                        </li>
+                        <li class="flex items-center text-sm" style="color: var(--text-secondary);">
+                            <i class="fas fa-phone ml-2 text-green-500"></i>
+                            +966 12 345 6789
+                        </li>
+                        <li class="flex items-center text-sm" style="color: var(--text-secondary);">
+                            <i class="fas fa-map-marker-alt ml-2 text-green-500"></i>
+                            الرياض، السعودية
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t pt-8 text-center" style="border-color: var(--border);">
+                <p class="text-sm" style="color: var(--text-secondary);">
+                    © 2025 LAHJA.AI. جميع الحقوق محفوظة. | تطوير شركة أسس الذكاء الرقمي
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        }
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileNav = document.getElementById('mobileNav');
+
+        menuToggle.addEventListener('click', () => {
+            mobileNav.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!menuToggle.contains(e.target) && !mobileNav.contains(e.target)) {
+                mobileNav.classList.add('hidden');
+            }
+        });
+
+        // Service Tabs
+        const serviceTabs = document.querySelectorAll('.service-tab');
+        const serviceCategories = document.querySelectorAll('.service-category');
+
+        serviceTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                serviceTabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                const category = tab.getAttribute('data-category');
+                
+                // Show/hide service categories
+                serviceCategories.forEach(cat => {
+                    if (category === 'all' || cat.getAttribute('data-category') === category) {
+                        cat.style.display = 'block';
+                    } else {
+                        cat.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu
+                    mobileNav.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1396,7 +1396,7 @@
                         <label for="endpoint">Endpoint</label>
                         <input type="text" id="endpoint" class="form-control"
                                placeholder="https://your-resource.openai.azure.com/"
-                               value="https://lahja-dev-resource2.cognitiveservices.azure.com/">
+                               value="https://lahja-dev-resource.cognitiveservices.azure.com/">
                     </div>
 
                     <div class="form-group">
@@ -1576,8 +1576,8 @@
         const SaudiVoiceAssistant = {
             // الإعدادات الحالية
             config: {
-                endpoint: 'https://lahja-dev-resource2.cognitiveservices.azure.com/',
-                apiKey: 'E7k8z3ADEUi2DZ1dl9pHlSTeUSoKb3jVjg5zYDAPNHBHKBfXlbTFJQQJ99BJACHYHv6XJ3w3AAAAACOGyF4Z',
+                endpoint: 'https://lahja-dev-resource.cognitiveservices.azure.com/',
+                apiKey: '4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM',
                 deployment: 'Wasm-V1',
                 ttsDeployment: 'LAHJA-V1',
                 apiVersion: '2024-02-01',
@@ -1777,7 +1777,7 @@
                 try {
                     this.showSuccess('جاري تحويل النص إلى صوت للتحميل...');
 
-                    const ttsEndpoint = "https://lahja-dev-resource2.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview";
+                    const ttsEndpoint = "https://lahja-dev-resource.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview";
 
                     const requestBody = {
                         model: this.config.ttsDeployment,
@@ -1791,7 +1791,7 @@
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
-                            "Authorization": "Bearer E7k8z3ADEUi2DZ1dl9pHlSTeUSoKb3jVjg5zYDAPNHBHKBfXlbTFJQQJ99BJACHYHv6XJ3w3AAAAACOGyF4Z"
+                            "Authorization": "Bearer 4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM"
                         },
                         body: JSON.stringify(requestBody)
                     });
@@ -2457,7 +2457,7 @@
                 try {
                     console.log('جاري تحويل النص إلى كلام:', text.substring(0, 50) + '...');
 
-                    const ttsEndpoint = "https://lahja-dev-resource2.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview";
+                    const ttsEndpoint = "https://lahja-dev-resource.cognitiveservices.azure.com/openai/deployments/LAHJA-V1/audio/speech?api-version=2025-03-01-preview";
 
                     // بناء request body مع جميع المعلمات المطلوبة
                     const requestBody = {
@@ -2477,7 +2477,7 @@
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
-                            "Authorization": "Bearer E7k8z3ADEUi2DZ1dl9pHlSTeUSoKb3jVjg5zYDAPNHBHKBfXlbTFJQQJ99BJACHYHv6XJ3w3AAAAACOGyF4Z"
+                            "Authorization": "Bearer 4AwsIf87cyBIgaJVsy0phWUQdZFcbrJxpQBDQNzL4xjcP2MFzrrYJQQJ99BIACHYHv6XJ3w3AAAAACOGYrzM"
                         },
                         body: JSON.stringify(requestBody)
                     });

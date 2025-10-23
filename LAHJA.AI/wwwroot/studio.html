@@ -3,48 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة لهجة AI - خدمات الذكاء الاصطناعي باللهجة النجدية</title>
+    <title>استديو لهجة AI    </title>
+    <link rel="icon" type="image/x-icon" href="logo.png" />
+    <!-- وصف الموقع لمحركات البحث -->
+    <meta name="description" content="منصة LAHJA.AI هي أول منصة متكاملة للذكاء الاصطناعي باللهجات السعودية، تجمع بين التقنية المتقدمة والأصالة اللغوية لتقديم حلول ذكية في تحويل النص إلى كلام وتوليد الصوت الواقعي.">
+
+    <!-- كلمات مفتاحية لتحسين الظهور في محركات البحث -->
+    <meta name="keywords" content="لهجة, لهجة سعودية, لهجة نجدية, ذكاء اصطناعي, تحويل النص إلى كلام, Lahja AI, Saudi AI, Najdi TTS, Arabic AI,Lahja">
+
+    <!-- اسم المؤلف -->
+    <meta name="author" content="LAHJA.AI Team">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
-        
+
         body {
             font-family: 'Tajawal', sans-serif;
             background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
         }
-        
+
         .gradient-bg {
             background: linear-gradient(135deg, #16a34a 0%, #22c55e 50%, #4ade80 100%);
         }
-        
+
         .service-card {
             transition: all 0.3s ease;
             border: 1px solid #e5e7eb;
         }
-        
-        .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
+
+            .service-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+
         .active-service {
             border-left: 4px solid #16a34a;
             background-color: #f0fdf4;
         }
-        
+
         .chat-message {
             max-width: 70%;
             margin-bottom: 1rem;
         }
-        
+
         .user-message {
             margin-left: auto;
             background: linear-gradient(135deg, #16a34a, #22c55e);
             color: white;
             border-radius: 1rem 1rem 0 1rem;
         }
-        
+
         .bot-message {
             margin-right: auto;
             background-color: white;
@@ -52,38 +61,51 @@
             border: 1px solid #e5e7eb;
             border-radius: 1rem 1rem 1rem 0;
         }
-        
+
         .audio-wave {
             height: 4px;
             background: linear-gradient(90deg, #16a34a, #22c55e, #4ade80);
             position: relative;
             overflow: hidden;
         }
-        
-        .audio-wave::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            animation: wave 1.5s linear infinite;
-        }
-        
+
+            .audio-wave::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+                animation: wave 1.5s linear infinite;
+            }
+
         @keyframes wave {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
-        
+
         .recording {
             animation: pulse 1.5s infinite;
         }
-        
+
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(22, 163, 74, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(22, 163, 74, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
+            }
         }
     </style>
 </head>
